@@ -1,0 +1,51 @@
+﻿@model Garage2._0._1.Models.ReceiptViewModel
+@{
+    ViewBag.Title = "Receipt";
+}
+<h2>Receipt</h2>
+<hr />
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.RegistrationNumber)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.RegistrationNumber)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.ParkingTime)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ParkingTime)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.CheckOutTime)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.CheckOutTime)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Hours)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Hours)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Price)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Price)
+    </dd>
+</dl>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+

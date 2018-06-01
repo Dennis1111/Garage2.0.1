@@ -16,7 +16,7 @@ namespace Garage2._0._1.Controllers
         private RegisterContext db = new RegisterContext();
 
         // GET: ParkedVehicles
-        public ActionResult Index()
+        public ActionResult Index(string regNr="")
         {
             return View(db.ParkedVehicle.ToList());
         }
@@ -36,13 +36,14 @@ namespace Garage2._0._1.Controllers
             return View(parkedVehicle);
         }
 
+        /*
         public ActionResult Checkout()
         {
             return View();
-        }
+        }*/
 
-        // GET: ParkedVehicles/Details/5
-        [HttpPost]
+
+        // GET: ParkedVehicles/Delete/5
         public ActionResult Checkout(string id)
         {
             if (id == null)
@@ -57,15 +58,34 @@ namespace Garage2._0._1.Controllers
             return View(parkedVehicle);
         }
 
-        //GET: Receipt
+        /*
+        // GET: ParkedVehicles/Details/5
         [HttpPost]
-        public ActionResult Receipt(String id)
+        public ActionResult Checkout(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ParkedVehicle parkedVehicle = db.ParkedVehicle.Find(id);
+            if (parkedVehicle == null)
+            {
+                return HttpNotFound();
+            }
+            return View(parkedVehicle);
+        }*/
+
+        //GET: Receipt
+        //[HttpPost]
+        //public ActionResult Receipt(String nameToFind)
+        public ActionResult Receipt(ReceiptViewModel receiptViewModel)
+        {
+            /*
+            if (nameToFind == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ParkedVehicle parkedVehicle = db.ParkedVehicle.Find(nameToFind);
 
             if (parkedVehicle == null)
             {
@@ -84,8 +104,8 @@ namespace Garage2._0._1.Controllers
                 CheckOutTime = checkOutTime,
                 Hours = (int)parkedTime.TotalHours,
                 Price = hours * pricePerHour
-            };
-            return View(receiptViewModel);
+            };*/
+            return View(receiptViewModel);          
         }
 
 
@@ -158,6 +178,18 @@ namespace Garage2._0._1.Controllers
             return View(parkedVehicle);
         }
 
+        /*
+        // POST: ParkedVehicles/Delete/5
+        [HttpPost, ActionName("Checkout")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CheckoutConfirmed(string id)
+        {
+            ParkedVehicle parkedVehicle = db.ParkedVehicle.Find(id);
+            db.ParkedVehicle.Remove(parkedVehicle);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }*/
+
         // POST: ParkedVehicles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -166,7 +198,20 @@ namespace Garage2._0._1.Controllers
             ParkedVehicle parkedVehicle = db.ParkedVehicle.Find(id);
             db.ParkedVehicle.Remove(parkedVehicle);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            var checkOutTime = DateTime.Now;
+            var parkedTime = checkOutTime.Subtract(parkedVehicle.ParkingTime);
+            var hours = (int)parkedTime.TotalHours;
+            var pricePerHour = 10;
+
+            ReceiptViewModel receiptViewModel = new ReceiptViewModel()
+            {
+                RegistrationNumber = parkedVehicle.RegistrationNumber,
+                ParkingTime = parkedVehicle.ParkingTime,
+                CheckOutTime = checkOutTime,
+                Hours = (int)parkedTime.TotalHours,
+                Price = hours * pricePerHour
+            };
+            return RedirectToAction("Receipt",receiptViewModel);
         }
 
         protected override void Dispose(bool disposing)

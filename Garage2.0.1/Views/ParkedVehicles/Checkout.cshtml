@@ -2,14 +2,10 @@
 @{
     ViewBag.Title = "Checkout";
 }
-
 <h2>Checkout</h2>
 
 @using (Html.BeginForm("Receipt", "ParkedVehicles", FormMethod.Post))
 {
-    <div>
-        Registration Number:<br>
-        <input type="text" id="nameToFind" name="nameToFind">
-        <input type="button" id="submitId" value="submit" />
-    </div>
+    <input type="text" id="nameToFind" name="nameToFind">
+    <input type="submit" id="submitId" value="submit" class="btn btn-default" />
 }

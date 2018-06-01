@@ -1,5 +1,6 @@
 namespace Garage2._0._1.Migrations
 {
+    using Garage2._0._1.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -18,6 +19,15 @@ namespace Garage2._0._1.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            context.ParkedVehicle.AddOrUpdate(p => p.RegistrationNumber,
+                new ParkedVehicle()
+                {
+                    RegistrationNumber = "ABC123",
+                    Brand = "Volvo",
+                    Color = "Greeen",
+                    Wheels = 4,
+                    Type = VehicleType.Car
+                });
         }
     }
 }

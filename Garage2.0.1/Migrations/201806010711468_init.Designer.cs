@@ -13,7 +13,7 @@ namespace Garage2._0._1.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201805311827156_init"; }
+            get { return "201806010711468_init"; }
         }
         
         string IMigrationMetadata.Source

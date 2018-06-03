@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Garage2._0._1.Models.ParkedVehicle>
-
 @{
     ViewBag.Title = "Index";
+    Garage2._0._1.Models.SearchFormModel info = ViewBag.SearchFormModel;
 }
 
 <h2>Index</h2>
@@ -12,10 +12,26 @@
 @using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Post))
 {
     <p>Find vehicle by registration number</p>
-    <input type="text" id="nameToFind" name="nameToFind">
-    <input type="submit" id="submitId" value="submit" class="btn btn-default" />        
+    @Html.Hidden("SortingMethod", info.SortingMethod)
+    @Html.Hidden("Column", info.Column)
+    @Html.TextBox("SearchName", info.SearchName)
+    @*<input type="text" id="nameToFind" name="nameToFind">*@
+    <input type="submit" id="submitId" value="submit" class="btn btn-default" />
 }
 
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        Dropdown Example
+        <span class="caret"></span>
+    </button>
+    <ul id="sortChoice" class="dropdown-menu">
+        <li class="active"><a href="#">HTML</a></li>
+        <li><a href="#">CSS</a></li>
+        <li><a href="#">JavaScript</a></li>
+    </ul>
+</div>
+
+@Html.ActionLink("Sortorder", "Index", new { sortOrder = ViewBag.NameSortParm })
 <table class="table">
     <tr>
         <th>
@@ -64,9 +80,8 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.RegistrationNumber }) |
                 @Html.ActionLink("Details", "Details", new { id = item.RegistrationNumber }) |
                 @Html.ActionLink("Checkout", "Delete", new { id = item.RegistrationNumber })
-                @*@Html.ActionLink("Checkout", "Checkout", new { id = item.RegistrationNumber })*@
             </td>
         </tr>
     }
-
 </table>
+

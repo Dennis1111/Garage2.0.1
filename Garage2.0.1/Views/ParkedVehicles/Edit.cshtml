@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Edit";
 }
-
 <h2>Edit</h2>
 
 @using (Html.BeginForm())
@@ -12,7 +11,7 @@
     
     <div class="form-horizontal">
         <h4>ParkedVehicle</h4>
-        <hr />
+        <hr/>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.RegistrationNumber)
 

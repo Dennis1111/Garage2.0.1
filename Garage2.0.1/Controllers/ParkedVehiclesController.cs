@@ -16,15 +16,60 @@ namespace Garage2._0._1.Controllers
         private RegisterContext db = new RegisterContext();
 
         // GET: ParkedVehicles
-        public ActionResult Index(string nameToFind, bool ascending)
-        {   
-            if (String.IsNullOrEmpty(nameToFind))
-                return View(db.ParkedVehicle.ToList());
-            var REG = db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(nameToFind));
-            if (ascending)
-                return View(REG.OrderByDescending(v => v.RegistrationNumber).ToList());
+        [HttpGet]
+        public ActionResult Index()
+        {
+            IQueryable<ParkedVehicle> parkedVehicles = db.ParkedVehicle;
+            /*if (!String.IsNullOrEmpty(nameToFind))
+                parkedVehicles = db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(nameToFind));
             else
-                return View(REG.OrderBy(v => v.RegistrationNumber).ToList());
+                parkedVehicles = db.ParkedVehicle;
+            parkedVehicles = sortOrder.Equals("ascending") ? parkedVehicles.OrderByDescending(v => v.RegistrationNumber) :
+                parkedVehicles.OrderBy(v => v.RegistrationNumber);*/
+            SearchFormModel init = new SearchFormModel()
+            {
+                SearchName = "",
+                Column = "RegistrationNumber",
+                SortingMethod = Sorting.Ascending
+            };
+            ViewBag.SearchFormModel = init;
+            return View(parkedVehicles.ToList());
+        }
+
+        // GET: ParkedVehicles
+        //https://www.codeguru.com/csharp/.net/net_asp/mvc/implementing-sorting-and-paging-in-asp.net-mvc.html
+        [HttpPost]
+        public ActionResult Index(SearchFormModel form)
+        {
+            IQueryable<ParkedVehicle> parkedVehicles;
+            if (!String.IsNullOrEmpty(form.SearchName))
+                switch (form.Column)
+                {
+                    case "RegistrationNumber":
+                        parkedVehicles = db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(form.SearchName));
+                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
+                            parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
+                        break;
+                    case "Type":
+                        parkedVehicles = db.ParkedVehicle.Where(v => v.Type.Equals(form.SearchName));
+                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
+                            parkedVehicles.OrderByDescending(v => v.Type) : parkedVehicles.OrderBy(v => v.Type);
+                        break;
+                    case "Color":
+                        parkedVehicles = db.ParkedVehicle.Where(v => v.Color.Equals(form.SearchName));
+                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
+                            parkedVehicles.OrderByDescending(v => v.Color) : parkedVehicles.OrderBy(v => v.Color);
+                        break;
+                    default:
+                        parkedVehicles = db.ParkedVehicle.Where(v => v.Brand.Equals(form.SearchName));
+                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
+                            parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
+                        break;
+                }
+            else
+                parkedVehicles = db.ParkedVehicle;
+            ViewBag.SearchFormModel = form;
+            return View(parkedVehicles.ToList());
         }
 
         // GET: ParkedVehicles/Details/5
@@ -38,7 +83,7 @@ namespace Garage2._0._1.Controllers
             if (parkedVehicle == null)
             {
                 return HttpNotFound();
-            }          
+            }
             return View(parkedVehicle);
         }
 
@@ -47,7 +92,6 @@ namespace Garage2._0._1.Controllers
         {
             return View();
         }*/
-
 
         // GET: ParkedVehicles/Delete/5
         public ActionResult Checkout(string id)
@@ -92,17 +136,14 @@ namespace Garage2._0._1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ParkedVehicle parkedVehicle = db.ParkedVehicle.Find(nameToFind);
-
             if (parkedVehicle == null)
             {
                 return HttpNotFound();
             }
-
             var checkOutTime = DateTime.Now;
             var parkedTime = checkOutTime.Subtract(parkedVehicle.ParkingTime);
             var hours = (int)parkedTime.TotalHours;
             var pricePerHour = 10;
-
             ReceiptViewModel receiptViewModel = new ReceiptViewModel()
             {
                 RegistrationNumber = parkedVehicle.RegistrationNumber,
@@ -111,7 +152,7 @@ namespace Garage2._0._1.Controllers
                 Hours = (int)parkedTime.TotalHours,
                 Price = hours * pricePerHour
             };*/
-            return View(receiptViewModel);          
+            return View(receiptViewModel);
         }
 
 
@@ -217,7 +258,7 @@ namespace Garage2._0._1.Controllers
                 Hours = (int)parkedTime.TotalHours,
                 Price = hours * pricePerHour
             };
-            return RedirectToAction("Receipt",receiptViewModel);
+            return RedirectToAction("Receipt", receiptViewModel);
         }
 
         protected override void Dispose(bool disposing)

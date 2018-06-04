@@ -15,6 +15,16 @@ namespace Garage2._0._1.Models
         Bus
     }
 
+    public enum SortingFields
+    {
+        RegistrationNumber,
+        Type,
+        Color,
+        Brand,
+        Wheels,
+        ParkingTime
+    }
+
     public class ParkedVehicle
     {
         public VehicleType Type { get; set; }

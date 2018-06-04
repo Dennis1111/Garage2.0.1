@@ -9,49 +9,44 @@
     @Html.ActionLink("Park a car", "Create")
 </p>
 
-@using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Post))
+@using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Get))
 {
-    <p>Find vehicle by registration number</p>
-    @Html.Hidden("SortingMethod", info.SortingMethod)
-    @Html.TextBox("SearchName", info.SearchName)
-    @Html.DropDownList("Column",new SelectList(Enum.GetValues(typeof(Garage2._0._1.Models.SortingFields))),"Select Sorting Field")
-    @*<input type="text" id="nameToFind" name="nameToFind">*@
+    <p>Search for vehicle</p>
+    <input type="hidden" value=@ViewBag.Ascending name="ascending" id="sorting">
+    <input type="hidden" value=@ViewBag.Column name="column" id="coulumn">
+    <input type="text" id="searchName" name="searchName" placeholder=@ViewBag.SearchName>
     <input type="submit" id="submitId" value="submit" class="btn btn-default" />
 }
 
-@*
-<div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-        Dropdown Example
-        <span class="caret"></span>
-    </button>
-    <ul id="sortChoice" class="dropdown-menu">
-        <li class="active"><a href="#">HTML</a></li>
-        <li><a href="#">CSS</a></li>
-        <li><a href="#">JavaScript</a></li>
-    </ul>
-</div>
+<script>
+    var search = {
+        document.getElementById(searchName).innerText
+    }();
+    alert(search)
+</script>
 
-@Html.ActionLink("Sortorder", "Index", new { sortOrder = ViewBag.NameSortParm })*@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.RegistrationNumber)
+            @Html.ActionLink("Reg NR", "Index", new { ascending = ViewBag.Ascending, searchName = "getSearchOrder()", column = "RegistrationNumber" })
+
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.ActionLink("Type", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Type" })
+
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Color)
+            @Html.ActionLink("Color", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Color" })
+
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Brand)
+            @Html.ActionLink("Brand", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Brand" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Wheels)
+            @Html.ActionLink("Wheels", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Wheels" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ParkingTime)
+            @Html.ActionLink("Parking Time", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "ParkingTime" })
         </th>
         <th></th>
     </tr>
@@ -85,3 +80,11 @@
         </tr>
     }
 </table>
+
+<script>
+    function getSearchOrder() {
+        var temp = document.getElementById("searchName").innerText;
+        alert(temp)
+        return document.getElementById("searchName").innerText;
+    }
+</script>

@@ -6,8 +6,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
+    @*
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".header").click(function (evt) {
@@ -32,15 +33,9 @@
                 $("form").submit();
             });
 
-            $(".pager").click(function (evt) {
-                var pageindex = $(evt.target).data("pageindex");
-                $("#CurrentPageIndex").val(pageindex);
-                evt.preventDefault();
-                $("form").submit();
-            });
-
+          
         });
-    </script>
+    </script>*@
 
 
 </head>

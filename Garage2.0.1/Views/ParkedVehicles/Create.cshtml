@@ -1,17 +1,18 @@
 ﻿@model Garage2._0._1.Models.ParkedVehicle
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Park a Vehicle";
+    ViewBag.RegNrTaken = false;
 }
 
-<h2>Create</h2>
+<h2>ViewBag.Title</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>ParkedVehicle</h4>
+        <h4>Enter the Vehicle data</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -62,6 +63,10 @@
     </div>
 }
 
+@if (ViewBag.RegNrTaken)
+{
+    <h3> There is already a Vehicle with your registration number in the Garage</h3>
+}
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

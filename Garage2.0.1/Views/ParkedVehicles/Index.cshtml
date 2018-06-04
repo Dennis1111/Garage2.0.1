@@ -4,7 +4,7 @@
     Garage2._0._1.Models.SearchFormModel info = ViewBag.SearchFormModel;
 }
 
-<h2>Index</h2>
+<h2>Garage2.0</h2>
 <p>
     @Html.ActionLink("Park a car", "Create")
 </p>
@@ -14,22 +14,14 @@
     <p>Search for vehicle</p>
     <input type="hidden" value=@ViewBag.Ascending name="ascending" id="sorting">
     <input type="hidden" value=@ViewBag.Column name="column" id="coulumn">
-    <input type="text" id="searchName" name="searchName" placeholder=@ViewBag.SearchName>
+    <input type="text" id="searchName" name="searchName" value=@ViewBag.SearchName>
     <input type="submit" id="submitId" value="submit" class="btn btn-default" />
 }
-
-<script>
-    var search = {
-        document.getElementById(searchName).innerText
-    }();
-    alert(search)
-</script>
 
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Reg NR", "Index", new { ascending = ViewBag.Ascending, searchName = "getSearchOrder()", column = "RegistrationNumber" })
-
+            @Html.ActionLink("Registration number", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "RegistrationNumber" })
         </th>
         <th>
             @Html.ActionLink("Type", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Type" })
@@ -46,9 +38,41 @@
             @Html.ActionLink("Wheels", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Wheels" })
         </th>
         <th>
-            @Html.ActionLink("Parking Time", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "ParkingTime" })
+            @Html.ActionLink("Date", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Date" })
         </th>
-        <th></th>
+
+        @*
+        <th>
+            <a href="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">ParkingTime</a>
+            <a href="javascript:test()">ParkingTime</a>
+            <a href="#" onclick="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">dfg</a>
+            <button type="button" onclick="hrefParams('a','b')">Try it</button>
+        </th>
+
+
+        <th>
+            @Html.ActionLink("Reg NR", "Index", new { ascending = ViewBag.Ascending, searchName = "javascript:getSearchOrder()", column = "RegistrationNumber" })
+        </th>
+        <th>
+            @Html.ActionLink("Type", "Index", new { ascending = ViewBag.Ascending, searchName = "test()", column = "Type" })
+
+        </th>
+        <th>
+            @Html.ActionLink("Color", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Color" })
+
+        </th>
+        <th>
+            @Html.ActionLink("Brand", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Brand" })
+        </th>
+        <th>
+            @Html.ActionLink("Wheels", "Index", new { ascending = ViewBag.Ascending, searchName = "test()", column = "Wheels" })
+        </th>
+        <th>
+            <a href="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">ParkingTime</a>
+            <a href="test()">ParkingTime</a>
+            <a href="#" onclick="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">dfg</a>
+            <button type="button" onclick="hrefParams('a','b')">Try it</button>
+        </th>*@
     </tr>
 
     @foreach (var item in Model)
@@ -81,10 +105,22 @@
     }
 </table>
 
+<button type="button" onclick="test()">Try it</button>
+
 <script>
-    function getSearchOrder() {
-        var temp = document.getElementById("searchName").innerText;
-        alert(temp)
+    function hrefParams(ascending, column) {
+        var search = document.getElementById("searchName").value;
+        alert(search, ascending, column);
+        link = '/ParkedVehicles?ascending=' + ascending + '&searchName=' + search + '&column=' + column;
+        alert(link);
+        return link;
+    }
+
+    function test(value, viewBag) {
+        viewBag.SearchName = value;
+        var search = document.getElementById("searchName").value;
+        alert(search, ascending, column,value);
+        // onclick event is assigned to the #button element.
         return document.getElementById("searchName").innerText;
     }
 </script>

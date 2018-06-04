@@ -24,10 +24,42 @@ namespace Garage2._0._1.Migrations
                 {
                     RegistrationNumber = "ABC123",
                     Brand = "Volvo",
-                    Color = "Greeen",
+                    Color = "Yellow",
                     Wheels = 4,
                     Type = VehicleType.Car
-                });
+                },
+                new ParkedVehicle()
+                {
+                    RegistrationNumber = "XXX345",
+                    Brand = "Saab",
+                    Color = "Blue",
+                    Wheels = 4,
+                    Type = VehicleType.Car
+                },
+                new ParkedVehicle()
+                {
+                    RegistrationNumber = "DD123",
+                    Brand = "Volvo",
+                    Color = "Red",
+                    Wheels = 4,
+                    Type = VehicleType.MotorCycle
+                },
+                new ParkedVehicle()
+                {
+                    RegistrationNumber = "HELLO",
+                    Brand = "Scania",
+                    Color = "Yellow",
+                    Wheels = 4,
+                    Type = VehicleType.Bus
+                }, new ParkedVehicle()
+                {
+                    RegistrationNumber = "ZZZZ44",
+                    Brand = "Volvo",
+                    Color = "Purple",
+                    Wheels = 2,
+                    Type = VehicleType.Airplane
+                }
+                );
         }
     }
 }

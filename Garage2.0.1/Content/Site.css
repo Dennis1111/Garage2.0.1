@@ -1,14 +1,20 @@
 ﻿body {
+    background-image: url(../Content/bagimage.jpg);
+    background-size: cover;
     padding-top: 50px;
     padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
+    color: white;
     padding-left: 15px;
     padding-right: 15px;
 }
 
+    .body-content h1 {
+        color: #00ffff;
+    }
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -21,4 +27,68 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+a {
+    color: #f3e529;
+    font-size: 20px;
+}
+
+    a:hover {
+        color: white;
+        font-size: 20px;
+    }
+
+button:hover {
+    color: #333;
+    background-color: #78cecd;
+    border-color: #ccc;
+}
+
+button {
+    background-color: #e40971b0;
+    width: 68px;
+}
+
+.btn-default {
+    color: #333;
+    background-color: #78cecd;
+    border-color: #ccc;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    color: #4cff00;
+}
+
+dt {
+    color: #42e082;
+    font-weight: bold;
+}
+
+h3, .h3 {
+    color: #0df7b8;
+    font-size: 24px;
+}
+
+.navbar-inverse {
+    background-color: #503ec8a8;
+    border-color: #e6efbd;
+}
+
+table {
+    background-color: transparent;
+    background-color: black;
+    opacity: 0.8;
+}
+
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    opacity: 0.7;
+    background-color: #eee;
 }

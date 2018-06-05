@@ -208,7 +208,9 @@ namespace Garage2._0._1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(parkedVehicle).State = EntityState.Modified;
+                var old = db.ParkedVehicle.Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First();
+                old.Color = 
+                //db.Entry(parkedVehicle).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

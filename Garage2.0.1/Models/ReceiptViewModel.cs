@@ -15,7 +15,7 @@ namespace Garage2._0._1.Models
         public DateTime ParkingTime { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CheckOutTime { get; set; }
-        public int Hours { get; set;}
+        public int Minutes { get; set;}
         public double Price { get; set; }
     }
 }

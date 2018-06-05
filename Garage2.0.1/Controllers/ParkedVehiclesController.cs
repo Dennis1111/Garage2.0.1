@@ -55,9 +55,7 @@ namespace Garage2._0._1.Controllers
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
                         parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.ParkingTime);
                     break;
-            }
-            //if (parkedVehicles==null)
-
+            }           
 
             return View(parkedVehicles.ToList());
         }
@@ -72,43 +70,7 @@ namespace Garage2._0._1.Controllers
             return sorting == "Ascending" ? "Descending" : "Ascending";
         }
 
-        /*
-        // GET: ParkedVehicles
-        //https://www.codeguru.com/csharp/.net/net_asp/mvc/implementing-sorting-and-paging-in-asp.net-mvc.html
-        [HttpPost]
-        public ActionResult Index(SearchFormModel form)
-        {
-            IQueryable<ParkedVehicle> parkedVehicles;
-            if (!String.IsNullOrEmpty(form.SearchName))
-                switch (form.Column)
-                {
-                    case "RegistrationNumber":
-                        parkedVehicles = db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(form.SearchName));
-                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
-                            parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
-                        break;
-                    case "Type":
-                        parkedVehicles = db.ParkedVehicle.Where(v => v.Type.Equals(form.SearchName));
-                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
-                            parkedVehicles.OrderByDescending(v => v.Type) : parkedVehicles.OrderBy(v => v.Type);
-                        break;
-                    case "Color":
-                        parkedVehicles = db.ParkedVehicle.Where(v => v.Color.Equals(form.SearchName));
-                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
-                            parkedVehicles.OrderByDescending(v => v.Color) : parkedVehicles.OrderBy(v => v.Color);
-                        break;
-                    default:
-                        parkedVehicles = db.ParkedVehicle.Where(v => v.Brand.Equals(form.SearchName));
-                        parkedVehicles = form.SortingMethod.Equals("ascending") ?
-                            parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
-                        break;
-                }
-            else
-                parkedVehicles = db.ParkedVehicle;
-            ViewBag.SearchFormModel = form;
-            return View(parkedVehicles.ToList());
-        }*/
-
+        
         // GET: ParkedVehicles/Details/5
         public ActionResult Details(string id)
         {
@@ -122,38 +84,7 @@ namespace Garage2._0._1.Controllers
                 return HttpNotFound();
             }
             return View(parkedVehicle);
-        }
-
-        //GET: Receipt
-        //[HttpPost]
-        //public ActionResult Receipt(String nameToFind)
-        public ActionResult Receipt(ReceiptViewModel receiptViewModel)
-        {
-            /*
-            if (nameToFind == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ParkedVehicle parkedVehicle = db.ParkedVehicle.Find(nameToFind);
-            if (parkedVehicle == null)
-            {
-                return HttpNotFound();
-            }
-            var checkOutTime = DateTime.Now;
-            var parkedTime = checkOutTime.Subtract(parkedVehicle.ParkingTime);
-            var hours = (int)parkedTime.TotalHours;
-            var pricePerHour = 10;
-            ReceiptViewModel receiptViewModel = new ReceiptViewModel()
-            {
-                RegistrationNumber = parkedVehicle.RegistrationNumber,
-                ParkingTime = parkedVehicle.ParkingTime,
-                CheckOutTime = checkOutTime,
-                Hours = (int)parkedTime.TotalHours,
-                Price = hours * pricePerHour
-            };*/
-            return View(receiptViewModel);
-        }
-
+        }       
 
         // GET: ParkedVehicles/Create
         public ActionResult Create()
@@ -168,7 +99,7 @@ namespace Garage2._0._1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkedVehicle parkedVehicle)
         {
-            ViewBag.RegNrTaken   = false;
+            ViewBag.RegNrTaken = false;
             if (db.ParkedVehicle.Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).Count() > 0)
             {
                 ViewBag.RegNrTaken = true;
@@ -177,6 +108,7 @@ namespace Garage2._0._1.Controllers
             if (ModelState.IsValid)
             {
                 parkedVehicle.ParkingTime = DateTime.Now;
+                parkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber.ToUpper();
                 db.ParkedVehicle.Add(parkedVehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -205,12 +137,11 @@ namespace Garage2._0._1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkedVehicle parkedVehicle)
-        {
+        {            
             if (ModelState.IsValid)
             {
-                var old = db.ParkedVehicle.Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First();
-                old.Color = 
-                //db.Entry(parkedVehicle).State = EntityState.Modified;
+                parkedVehicle.ParkingTime = db.ParkedVehicle.AsNoTracking().Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First().ParkingTime;
+                db.Entry(parkedVehicle).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -250,10 +181,14 @@ namespace Garage2._0._1.Controllers
                 RegistrationNumber = parkedVehicle.RegistrationNumber,
                 ParkingTime = parkedVehicle.ParkingTime,
                 CheckOutTime = checkOutTime,
-                Hours = (int)parkedTime.TotalHours,
+                Minutes = (int)parkedTime.TotalHours,
                 Price = minutes * pricePerMinute
             };
             return RedirectToAction("Receipt", receiptViewModel);
+        }
+
+        public ActionResult Receipt(ReceiptViewModel receipt) {
+            return View(receipt);
         }
 
         protected override void Dispose(bool disposing)

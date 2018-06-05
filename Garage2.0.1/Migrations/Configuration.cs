@@ -2,9 +2,7 @@ namespace Garage2._0._1.Migrations
 {
     using Garage2._0._1.Models;
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Garage2._0._1.DataAccessLayer.RegisterContext>
     {
@@ -26,7 +24,8 @@ namespace Garage2._0._1.Migrations
                     Brand = "Volvo",
                     Color = "Yellow",
                     Wheels = 4,
-                    Type = VehicleType.Car
+                    Type = VehicleType.Car,
+                    ParkingTime = DateTime.Now
                 },
                 new ParkedVehicle()
                 {
@@ -34,30 +33,54 @@ namespace Garage2._0._1.Migrations
                     Brand = "Saab",
                     Color = "Blue",
                     Wheels = 4,
-                    Type = VehicleType.Car
+                    Type = VehicleType.Car,
+                    ParkingTime = DateTime.Now
                 },
+                   new ParkedVehicle()
+                   {
+                       RegistrationNumber = "CCC345",
+                       Brand = "Saab",
+                       Color = "Red",
+                       Wheels = 4,
+                       Type = VehicleType.Car,
+                       ParkingTime = DateTime.Now
+                   },
+                      new ParkedVehicle()
+                      {
+                          RegistrationNumber = "XXX345",
+                          Brand = "Saab",
+                          Color = "Blue",
+                          Wheels = 4,
+                          Type = VehicleType.Car,
+                          ParkingTime = DateTime.Now
+                      },
                 new ParkedVehicle()
                 {
-                    RegistrationNumber = "DD123",
-                    Brand = "Volvo",
+                    RegistrationNumber = "DDD123",
+                    Brand = "Kawazaki",
                     Color = "Red",
                     Wheels = 4,
-                    Type = VehicleType.MotorCycle
+                    Type = VehicleType.MotorCycle,
+                    ParkingTime = DateTime.Now
                 },
+
                 new ParkedVehicle()
                 {
-                    RegistrationNumber = "HELLO",
+                    RegistrationNumber = "GHY678",
                     Brand = "Scania",
                     Color = "Yellow",
                     Wheels = 4,
-                    Type = VehicleType.Bus
-                }, new ParkedVehicle()
+                    Type = VehicleType.Bus,
+                    ParkingTime = DateTime.Now
+                },
+                new ParkedVehicle()
                 {
-                    RegistrationNumber = "ZZZZ44",
-                    Brand = "Volvo",
+                    RegistrationNumber = "ZZZ111",
+                    Brand = "Boeing",
                     Color = "Purple",
                     Wheels = 2,
-                    Type = VehicleType.Airplane
+                    Type = VehicleType.Airplane,
+                    ParkingTime = DateTime.Now
                 }
                 );
         }

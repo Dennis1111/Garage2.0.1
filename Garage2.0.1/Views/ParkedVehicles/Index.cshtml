@@ -4,18 +4,27 @@
     Garage2._0._1.Models.SearchFormModel info = ViewBag.SearchFormModel;
 }
 
-<h2>Garage2.0</h2>
+<h2>Parking Instructions</h2>
+<p>
+    To limit the search list enter a search name and press search.
+    By default sorting is done on registration number and in Ascending order
+    Press another column so sort on that vehicle feature.
+    Press same column again to toggle the sort order.
+</p>
+
 <p>
     @Html.ActionLink("Park a car", "Create")
 </p>
 
 @using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Get))
 {
-    <p>Search for vehicle</p>
+    <label>Search on a vehicle feature</label>
     <input type="hidden" value=@ViewBag.Ascending name="ascending" id="sorting">
-    <input type="hidden" value=@ViewBag.Column name="column" id="coulumn">
+
     <input type="text" id="searchName" name="searchName" value=@ViewBag.SearchName>
-    <input type="submit" id="submitId" value="submit" class="btn btn-default" />
+    <input type="submit" id="submitId" value="Search" class="btn btn-default" />
+    <label>Current vehicle column</label>    
+    <input type="text" value=@ViewBag.Column name="column" id="coulumn">    
 }
 
 <table class="table">
@@ -40,39 +49,6 @@
         <th>
             @Html.ActionLink("Date", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Date" })
         </th>
-
-        @*
-        <th>
-            <a href="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">ParkingTime</a>
-            <a href="javascript:test()">ParkingTime</a>
-            <a href="#" onclick="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">dfg</a>
-            <button type="button" onclick="hrefParams('a','b')">Try it</button>
-        </th>
-
-
-        <th>
-            @Html.ActionLink("Reg NR", "Index", new { ascending = ViewBag.Ascending, searchName = "javascript:getSearchOrder()", column = "RegistrationNumber" })
-        </th>
-        <th>
-            @Html.ActionLink("Type", "Index", new { ascending = ViewBag.Ascending, searchName = "test()", column = "Type" })
-
-        </th>
-        <th>
-            @Html.ActionLink("Color", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Color" })
-
-        </th>
-        <th>
-            @Html.ActionLink("Brand", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Brand" })
-        </th>
-        <th>
-            @Html.ActionLink("Wheels", "Index", new { ascending = ViewBag.Ascending, searchName = "test()", column = "Wheels" })
-        </th>
-        <th>
-            <a href="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">ParkingTime</a>
-            <a href="test()">ParkingTime</a>
-            <a href="#" onclick="javascript:hrefParams(@ViewBag.Ascending,'ParkingTime')">dfg</a>
-            <button type="button" onclick="hrefParams('a','b')">Try it</button>
-        </th>*@
     </tr>
 
     @foreach (var item in Model)
@@ -105,8 +81,6 @@
     }
 </table>
 
-<button type="button" onclick="test()">Try it</button>
-
 <script>
     function hrefParams(ascending, column) {
         var search = document.getElementById("searchName").value;
@@ -119,7 +93,7 @@
     function test(value, viewBag) {
         viewBag.SearchName = value;
         var search = document.getElementById("searchName").value;
-        alert(search, ascending, column,value);
+        alert(search, ascending, column, value);
         // onclick event is assigned to the #button element.
         return document.getElementById("searchName").innerText;
     }

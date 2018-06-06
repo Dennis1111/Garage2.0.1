@@ -22,7 +22,6 @@ namespace Garage2._0._1.Models
         [Required]
         [StringLength(6, MinimumLength = 6)]
         [RegularExpression(@"^[A-Z]+[0-9]*$",ErrorMessage = "Only UpperCase or Numbers")]
-        //[RegularExpression(@"{A-Z}$",ErrorMessage = "Only UpperCase or Numbers")]
         public String RegistrationNumber { get; set; }
         [StringLength(20, MinimumLength = 3)]
         public String Color { get; set; }
@@ -31,7 +30,7 @@ namespace Garage2._0._1.Models
         [Range(2,8)]
         public int Wheels { get; set; }
         [Display(Name = "Parking Date")]
-        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm }", ApplyFormatInEditMode = true)]
         public DateTime ParkingTime { get; set; }
     }
 }

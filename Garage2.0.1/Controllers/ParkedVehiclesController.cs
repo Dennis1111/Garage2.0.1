@@ -51,12 +51,11 @@ namespace Garage2._0._1.Controllers
                     parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.Wheels);
                     break;
                 default:
-                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.Equals(searchName)) : db.ParkedVehicle;
+                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.ToString().Contains(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                        parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.ParkingTime);
+                        parkedVehicles.OrderByDescending(v => v.ParkingTime) : parkedVehicles.OrderBy(v => v.ParkingTime);
                     break;
-            }           
-
+            }                       
             return View(parkedVehicles.ToList());
         }
 
@@ -140,8 +139,9 @@ namespace Garage2._0._1.Controllers
         {            
             if (ModelState.IsValid)
             {
-                parkedVehicle.ParkingTime = db.ParkedVehicle.AsNoTracking().Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First().ParkingTime;
+                //parkedVehicle.ParkingTime = db.ParkedVehicle.AsNoTracking().Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First().ParkingTime;
                 db.Entry(parkedVehicle).State = EntityState.Modified;
+                db.Entry(parkedVehicle).Property(x => x.ParkingTime).IsModified = false;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

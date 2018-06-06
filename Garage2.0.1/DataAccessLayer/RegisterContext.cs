@@ -10,7 +10,7 @@ namespace Garage2._0._1.DataAccessLayer
     {
         public DbSet<Models.ParkedVehicle> ParkedVehicle { get; set; }
 
-        public RegisterContext() : base("ParkedVehicleCon")
+        public RegisterContext() : base("GarageDB")
         {   
         }
     }

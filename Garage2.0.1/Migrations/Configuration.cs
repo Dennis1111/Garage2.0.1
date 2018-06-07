@@ -47,7 +47,7 @@ namespace Garage2._0._1.Migrations
                    },
                       new ParkedVehicle()
                       {
-                          RegistrationNumber = "XXX345",
+                          RegistrationNumber = "ZXC345",
                           Brand = "Saab",
                           Color = "Blue",
                           Wheels = 4,

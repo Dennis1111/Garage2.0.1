@@ -1,85 +1,86 @@
-﻿@model Garage2._0._1.Models.ParkedVehiclesViewModel
-    @{
-        ViewBag.Title = "Index";
-    }
+﻿@using Garage2._0._1.Models
+@model ParkedVehiclesViewModel
+@{
+    ViewBag.Title = "Index";
+}
 
-    <h2>Parking Instructions</h2>
-    <p>
-        To limit the search list enter a search name and press search.
-        By default sorting is done on registration number and in Ascending order
-        Press another column so sort on that vehicle feature.
-        Press same column again to toggle the sort order.
-    </p>
+<h2>Parking Instructions</h2>
+<p>
+    To limit the search list enter a search name and press search.
+    By default sorting is done on registration number and in Ascending order
+    Press another column so sort on that vehicle feature.
+    Press same column again to toggle the sort order.
+</p>
 
-    <p>
-        @Html.ActionLink("Park a car", "Create")
-    </p>
+<p>
+    @Html.ActionLink("Park a car", "Create")
+</p>
 
-    @using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Get))
+@using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Get))
+{   
+    <input type="hidden" value=@Model.SortOrder name="ascending" id="sorting" >
+    <input type="text" value=@Model.Column name="column" id="coulumn" class="input">
+    @Html.DropDownListFor(e => e.SelectedVehicleType, Model.VehicleTypeSelectList,new {@class ="input" })
+    <input type="text" id="searchName" name="searchName" value=@Model.SearchName>
+    <label>Current vehicle column</label>
+    <input type="text" value=@Model.Column name="column" id="coulumn">
+    <input type="submit" id="submitId" value="Search" class="btn btn-default" />
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Owner", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Owner" })
+        </th>
+        <th>
+            @Html.ActionLink("Vehicle Type", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Type" })
+        </th>
+        <th>
+            @Html.ActionLink("Registration Number", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "RegistrationNumber" })
+        </th>
+        <th>
+            @Html.ActionLink("Date", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Date" })
+        </th>
+    </tr>
+
+    @foreach (var item in Model.ParkedVehicles)
     {
-        <label>Search on a vehicle feature</label>
-        <input type="hidden" value=@Model.SortOrder name="ascending" id="sorting">
-        <input type="text" id="searchName" name="searchName" value=@Model.SearchName>
-        <input type="submit" id="submitId" value="Search" class="btn btn-default" />
-        <label>Current vehicle column</label>
-        <input type="text" value=@Model.Column name="column" id="coulumn">
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleType.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegistrationNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParkingTime)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.RegistrationNumber }) |
+                @Html.ActionLink("Details", "Details", new { id = item.RegistrationNumber }) |
+                @Html.ActionLink("Checkout", "Delete", new { id = item.RegistrationNumber })
+            </td>
+        </tr>
+    }
+</table>
+
+<script>
+    function hrefParams(ascending, column) {
+        var search = document.getElementById("searchName").value;
+        alert(search, ascending, column);
+        link = '/ParkedVehicles?ascending=' + ascending + '&searchName=' + search + '&column=' + column;
+        alert(link);
+        return link;
     }
 
-    <table class="table">
-        <tr>
-            <th>
-                @Html.ActionLink("Owner", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Owner" })
-            </th>
-            <th>
-                @Html.ActionLink("Vehicle Type", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Type" })
-
-            </th>
-            <th>
-                @Html.ActionLink("Registration Number", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "RegistrationNumber" })
-            </th>
-            <th>
-                @Html.ActionLink("Date", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Date" })
-            </th>
-        </tr>
-
-        @foreach (var item in Model.ParkedVehicles)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.VehicleType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ParkingTime)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.RegistrationNumber }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.RegistrationNumber }) |
-                    @Html.ActionLink("Checkout", "Delete", new { id = item.RegistrationNumber })
-                </td>
-            </tr>
-        }
-    </table>
-
-    <script>
-        function hrefParams(ascending, column) {
-            var search = document.getElementById("searchName").value;
-            alert(search, ascending, column);
-            link = '/ParkedVehicles?ascending=' + ascending + '&searchName=' + search + '&column=' + column;
-            alert(link);
-            return link;
-        }
-
-        function test(value, viewBag) {
-            viewBag.SearchName = value;
-            var search = document.getElementById("searchName").value;
-            alert(search, ascending, column, value);
-            // onclick event is assigned to the #button element.
-            return document.getElementById("searchName").innerText;
-        }
-    </script>
+    function test(value, viewBag) {
+        viewBag.SearchName = value;
+        var search = document.getElementById("searchName").value;
+        alert(search, ascending, column, value);
+        // onclick event is assigned to the #button element.
+        return document.getElementById("searchName").innerText;
+    }
+</script>

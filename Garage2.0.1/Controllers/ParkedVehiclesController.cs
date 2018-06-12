@@ -14,33 +14,49 @@ namespace Garage2._0._1.Controllers
     public class ParkedVehiclesController : Controller
     {
         private RegisterContext db = new RegisterContext();
+        private List<SelectListItem> vehicleTypeSelectList;
 
-        public ActionResult Start() {                    
+        private List<SelectListItem> GetVehicleTypeSelectList()
+        {
+            if (vehicleTypeSelectList == null)
+            {//var 
+                vehicleTypeSelectList = new List<SelectListItem>();
+                int count = 1;
+                foreach (var type in db.VehicleTypes)
+                {
+                    vehicleTypeSelectList.Add(new SelectListItem() { Text = type.Type, Value = count.ToString() });
+                }
+            }
+            return vehicleTypeSelectList;
+        }
+
+        public ActionResult Start()
+        {
             return View();
         }
 
         // GET: ParkedVehicles
         [HttpGet]
-        public ActionResult Index(string column, string ascending, string searchName)
+        public ActionResult Index(string column, string ascending, string searchName,string selectedVehicleType)
         {
             //ViewBag.SearchName = searchName;
             //ViewBag.Ascending = ascending == null ? "Ascending" : ascending;
             //ViewBag.Column = column == null ? "RegistrationNumber" : column;
             //Switch order when user press same column twice
-            if (ViewBag.Column == column)
-                ViewBag.Ascending = Toggle(ascending);
+            //if (ViewBag.Column == column)
+            //    ViewBag.Ascending = Toggle(ascending);
             IQueryable<ParkedVehicle> parkedVehicles;
             switch (column)
             {
                 case "RegistrationNumber":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
-                    break;/*
-                case "Type":
-                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Type.ToString().Equals(searchName)) : db.ParkedVehicle;
+                    break;                   
+                case "VehicleType":
+                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.VehicleType.Type.Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                        parkedVehicles.OrderByDescending(v => v.VehicleType) : parkedVehicles.OrderBy(v => v.Type);
-                    break;*/
+                        parkedVehicles.OrderByDescending(v => v.VehicleType) : parkedVehicles.OrderBy(v => v.VehicleType.Type);
+                    break;
                 case "Color":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Color.Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
@@ -50,10 +66,10 @@ namespace Garage2._0._1.Controllers
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Brand.Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
                     break;
-                case "Wheels":
+                /*case "Wheels":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Wheels.ToString().Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.Wheels);
-                    break;
+                    break;*/
                 default:
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.ToString().Contains(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
@@ -61,10 +77,13 @@ namespace Garage2._0._1.Controllers
                     break;
             }
 
-            ParkedVehiclesViewModel model = new ParkedVehiclesViewModel {
+            ParkedVehiclesViewModel model = new ParkedVehiclesViewModel
+            {
                 SearchName = searchName,
                 SortOrder = ascending,
                 Column = column,
+                SelectedVehicleType = selectedVehicleType,
+                VehicleTypeSelectList = GetVehicleTypeSelectList(),
                 ParkedVehicles = parkedVehicles
             };
             return View(model);
@@ -80,7 +99,7 @@ namespace Garage2._0._1.Controllers
             return sorting == "Ascending" ? "Descending" : "Ascending";
         }
 
-        
+
         // GET: ParkedVehicles/Details/5
         public ActionResult Details(string id)
         {
@@ -94,7 +113,7 @@ namespace Garage2._0._1.Controllers
                 return HttpNotFound();
             }
             return View(parkedVehicle);
-        }       
+        }
 
         // GET: ParkedVehicles/Create
         public ActionResult Create()
@@ -147,9 +166,9 @@ namespace Garage2._0._1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkedVehicle parkedVehicle)
-        {            
+        {
             if (ModelState.IsValid)
-            {   
+            {
                 //parkedVehicle.ParkingTime = db.ParkedVehicle.AsNoTracking().Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First().ParkingTime;
                 db.Entry(parkedVehicle).State = EntityState.Modified;
                 db.Entry(parkedVehicle).Property(x => x.ParkingTime).IsModified = false;
@@ -198,7 +217,8 @@ namespace Garage2._0._1.Controllers
             return RedirectToAction("Receipt", receiptViewModel);
         }
 
-        public ActionResult Receipt(ReceiptViewModel receipt) {
+        public ActionResult Receipt(ReceiptViewModel receipt)
+        {
             return View(receipt);
         }
 

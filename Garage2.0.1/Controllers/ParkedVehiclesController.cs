@@ -31,12 +31,12 @@ namespace Garage2._0._1.Controllers
                 case "RegistrationNumber":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
-                    break;
+                    break;/*
                 case "Type":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Type.ToString().Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                        parkedVehicles.OrderByDescending(v => v.Type) : parkedVehicles.OrderBy(v => v.Type);
-                    break;
+                        parkedVehicles.OrderByDescending(v => v.VehicleType) : parkedVehicles.OrderBy(v => v.Type);
+                    break;*/
                 case "Color":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Color.Equals(searchName)) : db.ParkedVehicle;
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
@@ -138,7 +138,7 @@ namespace Garage2._0._1.Controllers
         public ActionResult Edit([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkedVehicle parkedVehicle)
         {            
             if (ModelState.IsValid)
-            {
+            {   
                 //parkedVehicle.ParkingTime = db.ParkedVehicle.AsNoTracking().Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).First().ParkingTime;
                 db.Entry(parkedVehicle).State = EntityState.Modified;
                 db.Entry(parkedVehicle).Property(x => x.ParkingTime).IsModified = false;

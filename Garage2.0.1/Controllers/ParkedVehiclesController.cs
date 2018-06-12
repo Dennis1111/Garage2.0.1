@@ -23,9 +23,9 @@ namespace Garage2._0._1.Controllers
         [HttpGet]
         public ActionResult Index(string column, string ascending, string searchName)
         {
-            ViewBag.SearchName = searchName;
-            ViewBag.Ascending = ascending == null ? "Ascending" : ascending;
-            ViewBag.Column = column == null ? "RegistrationNumber" : column;
+            //ViewBag.SearchName = searchName;
+            //ViewBag.Ascending = ascending == null ? "Ascending" : ascending;
+            //ViewBag.Column = column == null ? "RegistrationNumber" : column;
             //Switch order when user press same column twice
             if (ViewBag.Column == column)
                 ViewBag.Ascending = Toggle(ascending);
@@ -59,8 +59,15 @@ namespace Garage2._0._1.Controllers
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
                         parkedVehicles.OrderByDescending(v => v.ParkingTime) : parkedVehicles.OrderBy(v => v.ParkingTime);
                     break;
-            }                       
-            return View(parkedVehicles.ToList());
+            }
+
+            ParkedVehiclesViewModel model = new ParkedVehiclesViewModel {
+                SearchName = searchName,
+                SortOrder = ascending,
+                Column = column,
+                ParkedVehicles = parkedVehicles
+            };
+            return View(model);
         }
 
         private Boolean Ascending(string sorting)

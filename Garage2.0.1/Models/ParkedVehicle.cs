@@ -11,6 +11,7 @@ namespace Garage2._0._1.Models
     public class ParkedVehicle
     {
         //public VehicleType Type { get; set; }
+        public string Owner => Member.FirstName + " " + Member.LastName; 
         [Key]
         [Required]
         [StringLength(6, MinimumLength = 6)]

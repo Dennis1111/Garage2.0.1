@@ -13,8 +13,8 @@ namespace Garage2._0._1.Models
         public string SearchName { get; set; }
         public string SortOrder { get; set; }
         public string Column { get; set; }
-        public string SelectedVehicleType { get; set; }
-        public List<SelectListItem> VehicleTypeSelectList { get; set; }
+        public string SelectedColumn { get; set; }
+        public List<SelectListItem> ColumnSelectList { get; set; }
         public IEnumerable<ParkedVehicle> ParkedVehicles { get; set;}
     }
 }

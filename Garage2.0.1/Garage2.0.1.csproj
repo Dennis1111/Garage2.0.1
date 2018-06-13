@@ -156,6 +156,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
+    <Compile Include="Controllers\ParkedVehicles2Controller.cs" />
     <Compile Include="Controllers\ParkedVehiclesController.cs" />
     <Compile Include="DataAccessLayer\RegisterContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -257,6 +258,11 @@
     <Content Include="Views\Members\Edit.cshtml" />
     <Content Include="Views\Members\Index.cshtml" />
     <Content Include="Views\ParkedVehicles\Start.cshtml" />
+    <Content Include="Views\ParkedVehicles2\Create.cshtml" />
+    <Content Include="Views\ParkedVehicles2\Delete.cshtml" />
+    <Content Include="Views\ParkedVehicles2\Details.cshtml" />
+    <Content Include="Views\ParkedVehicles2\Edit.cshtml" />
+    <Content Include="Views\ParkedVehicles2\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

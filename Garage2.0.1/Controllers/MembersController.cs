@@ -36,6 +36,8 @@ namespace Garage2._0._1.Controllers
             return View(member);
         }
 
+
+
         // GET: Members/Create
         public ActionResult Create()
         {
@@ -51,6 +53,10 @@ namespace Garage2._0._1.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (db.Member.Any(m => m.FirstName.ToLower() == member.FirstName.ToLower() && m.LastName.ToLower() == member.LastName.ToLower())) 
+                {
+                    return View(member);
+                }
                 db.Member.Add(member);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -104,6 +110,8 @@ namespace Garage2._0._1.Controllers
             }
             return View(member);
         }
+
+
 
         // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]

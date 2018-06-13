@@ -15,7 +15,32 @@
     <div class="form-horizontal">
         <h4>Enter the Vehicle data</h4>
         <hr />
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        @if (!Model.MemberFound && Model.Post)
+        {
+            <h2>The user @Model.Member.FirstName @Model.Member.LastName is not Registerered in the Database</h2>
+            <h2>Register as a member before parking in the garage</h2>
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Member.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Member.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Member.FirstName, "", new { @class = "text-danger" })
+            </div>  
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Member.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Member.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Member.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
         <div class="form-group">
             @Html.LabelFor(model => model.ParkedVehicle.RegistrationNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -28,7 +53,8 @@
             @Html.LabelFor(model => model.ParkedVehicle.VehicleType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.DropDownListFor(model => model.VehicleTypeSelectList, new { @class = "form-control" })*@
-                @* @Html.DropDownListFor(model => model.VehicleType, htmlAttributes: new { @class = "form-control" })*@
+                @*@Html.DropDownList("VehicleTypeId", null, htmlAttributes: new { @class = "form-control" })*@
+                @Html.DropDownListFor(model => model.SelectedVehicleTypeId,  new SelectList( Model.VehicleTypeSelectList, "Id", "Type") , new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ParkedVehicle.VehicleType, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -63,11 +89,6 @@
             </div>
         </div>
     </div>
-}
-
-@if (ViewBag.RegNrTaken)
-{
-    <h3> There is already a Vehicle with your registration number in the Garage</h3>
 }
 
 <div>

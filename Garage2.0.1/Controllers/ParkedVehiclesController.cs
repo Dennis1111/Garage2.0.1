@@ -20,14 +20,16 @@ namespace Garage2._0._1.Controllers
         private List<SelectListItem> GetVehicleTypeSelectList()
         {
             if (vehicleTypeSelectList == null)
-            {//var 
+            {//var
                 vehicleTypeSelectList = new List<SelectListItem>();
-                vehicleTypeSelectList.Add(new SelectListItem() { Text = "Any", Value = "0" });
-                int count = 1;
-                
+                //vehicleTypeSelectList.Add(new SelectListItem() { Text = "Any", Value = "0" });
+                // int count = 1;
+
                 foreach (var type in db.VehicleTypes)
                 {
-                    vehicleTypeSelectList.Add(new SelectListItem() { Text = type.Type, Value = count.ToString() });
+                    //vehicleTypeSelectList.Add(new SelectListItem() { Text = type.Type, Value = count.ToString() });
+                    vehicleTypeSelectList.Add(new SelectListItem() { Text = type.Type, Value = type.Type });
+
                 }
             }
             return vehicleTypeSelectList;
@@ -42,9 +44,18 @@ namespace Garage2._0._1.Controllers
                 columnSelectList.Add(new SelectListItem() { Text = "Owner", Value = "Owner" });
                 columnSelectList.Add(new SelectListItem() { Text = "Vehicle Type", Value = "VehicleType" });
                 columnSelectList.Add(new SelectListItem() { Text = "Registration Number", Value = "RegNr" });
-               //columnSelectList.Add(new SelectListItem() { Text = "Color", Value = "4" });
+                //columnSelectList.Add(new SelectListItem() { Text = "Color", Value = "4" });
             }
             return columnSelectList;
+        }
+
+        private Member GetMember(string firstName, string lastName)
+        {
+            var query = db.Member.Where(m => m.FirstName.ToLower() == firstName.ToLower() && m.LastName.ToLower() == lastName.ToLower());
+            if (query.Any())
+                return query.FirstOrDefault();
+            else
+                return null;
         }
 
         public ActionResult Start()
@@ -54,7 +65,7 @@ namespace Garage2._0._1.Controllers
 
         // GET: ParkedVehicles
         [HttpGet]
-        public ActionResult Index(string SelectedColumn, string ascending, string searchName,string selectedVehicleType)
+        public ActionResult Index(string SelectedColumn, string ascending, string searchName, string selectedVehicleType)
         {
             IQueryable<ParkedVehicle> parkedVehicles;
             switch (SelectedColumn)
@@ -66,11 +77,11 @@ namespace Garage2._0._1.Controllers
                         parkedVehicles = db.ParkedVehicle;
                         break;
                     }
-                    var FirstName=splitted[0];
+                    var FirstName = splitted[0];
                     var LastName = splitted[1];
-                    var member = db.Member.Where(m => m.FirstName.ToLower()==FirstName.ToLower() && m.LastName.ToLower() == LastName.ToLower());
+                    var member = db.Member.Where(m => m.FirstName.ToLower() == FirstName.ToLower() && m.LastName.ToLower() == LastName.ToLower());
                     var userFound = (member.Count() == 0);
-                    parkedVehicles = db.ParkedVehicle.Where(v=> v.MembersId==member.FirstOrDefault().Id);                  
+                    parkedVehicles = db.ParkedVehicle.Where(v => v.MembersId == member.FirstOrDefault().Id);
                     break;
                 case "RegNr":
                     parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(searchName)) : db.ParkedVehicle;
@@ -81,24 +92,24 @@ namespace Garage2._0._1.Controllers
                     parkedVehicles = !Ascending(ViewBag.Ascending) ?
                         parkedVehicles.OrderByDescending(v => v.VehicleType.Type) : parkedVehicles.OrderBy(v => v.VehicleType.Type);
                     break;
-                /*case "Color":
-                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Color.Equals(searchName)) : db.ParkedVehicle;
-                    parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                        parkedVehicles.OrderByDescending(v => v.Color) : parkedVehicles.OrderBy(v => v.Color);
-                    break;
-                case "Brand":
-                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Brand.Equals(searchName)) : db.ParkedVehicle;
-                    parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
-                    break;*/
-                /*case "Wheels":
-                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Wheels.ToString().Equals(searchName)) : db.ParkedVehicle;
-                    parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.Wheels);
-                    break;*/
-                /*default:
-                    parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.ToString().Contains(searchName)) : db.ParkedVehicle;
-                    parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                        parkedVehicles.OrderByDescending(v => v.ParkingTime) : parkedVehicles.OrderBy(v => v.ParkingTime);
-                    break;*/
+                    /*case "Color":
+                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Color.Equals(searchName)) : db.ParkedVehicle;
+                        parkedVehicles = !Ascending(ViewBag.Ascending) ?
+                            parkedVehicles.OrderByDescending(v => v.Color) : parkedVehicles.OrderBy(v => v.Color);
+                        break;
+                    case "Brand":
+                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Brand.Equals(searchName)) : db.ParkedVehicle;
+                        parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
+                        break;*/
+                    /*case "Wheels":
+                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Wheels.ToString().Equals(searchName)) : db.ParkedVehicle;
+                        parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.Wheels);
+                        break;*/
+                    /*default:
+                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.ToString().Contains(searchName)) : db.ParkedVehicle;
+                        parkedVehicles = !Ascending(ViewBag.Ascending) ?
+                            parkedVehicles.OrderByDescending(v => v.ParkingTime) : parkedVehicles.OrderBy(v => v.ParkingTime);
+                        break;*/
             }
 
             ParkedVehiclesViewModel model = new ParkedVehiclesViewModel
@@ -142,7 +153,13 @@ namespace Garage2._0._1.Controllers
         // GET: ParkedVehicles/Create
         public ActionResult Create()
         {
-            return View();
+            ParkVehicleViewModel model = new ParkVehicleViewModel()
+            {
+                VehicleTypeSelectList = db.VehicleTypes    //GetVehicleTypeSelectList(),
+                Post = false
+
+            };
+            return View(model);
         }
 
         // POST: ParkedVehicles/Create
@@ -150,23 +167,45 @@ namespace Garage2._0._1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkedVehicle parkedVehicle)
+        //public ActionResult Create([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime, ")] ParkedVehicle parkedVehicle,
+        //    [Bind(Include = "FirstName,LastName")] Member member, string SelectedVehicleType)
+        public ActionResult Create([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkVehicleVievModel parkedVehicle,
+            [Bind(Include = "FirstName,LastName")] Member member, string SelectedVehicleType)
         {
-            ViewBag.RegNrTaken = false;
-            if (db.ParkedVehicle.Where(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber).Count() > 0)
+            ParkVehicleViewModel model = new ParkVehicleViewModel
             {
-                ViewBag.RegNrTaken = true;
-                return View(parkedVehicle);
+                ParkedVehicle = parkedVehicle,
+                Member = member,
+                Post = true,
+                VehicleTypeSelectList = db.//GetVehicleTypeSelectList()
+
+            };
+
+            if (db.ParkedVehicle.Any(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber))
+            {
+                ModelState.AddModelError("RegistrationNumber", "registration number exist");
+                model.RegNrTaken = true;
+                //return View(model);
             }
+            var foundMember = GetMember(member.FirstName, member.LastName);
+            if (foundMember == null)
+            {
+                model.MemberFound = false;
+                return View(model);
+            }
+            model.MemberFound = true;
+
             if (ModelState.IsValid)
             {
                 parkedVehicle.ParkingTime = DateTime.Now;
                 parkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber.ToUpper();
+                parkedVehicle.MembersId = foundMember.Id;
+                parkedVehicle.VehicleTypeId = db.VehicleTypes.Where(v => v.Type == SelectedVehicleType).FirstOrDefault().Id;
                 db.ParkedVehicle.Add(parkedVehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(parkedVehicle);
+            return View(model);
         }
 
         // GET: ParkedVehicles/Edit/5

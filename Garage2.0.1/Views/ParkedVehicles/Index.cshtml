@@ -22,8 +22,6 @@
     <input type="hidden" value=@Model.SortOrder name="ascending" id="sorting">
     <input type="text" id="searchName" name="searchName" value=@Model.SearchName>
     @Html.DropDownListFor(e => e.SelectedColumn, Model.ColumnSelectList, new { @class = "input" })
-    <label>Current vehicle column</label>
-    <input type="text" value=@Model.Column name="column" id="coulumn">
     <input type="submit" id="submitId" value="Search" class="btn btn-default" />
 }
 

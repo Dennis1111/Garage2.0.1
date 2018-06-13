@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Garage2._0._1.Models.ParkedVehicle>
+﻿@using Garage2._0._1.Models
+@model ParkedVehiclesViewModel
 @{
     ViewBag.Title = "Index";
-    Garage2._0._1.Models.SearchFormModel info = ViewBag.SearchFormModel;
 }
 
 <h2>Parking Instructions</h2>
@@ -17,56 +17,43 @@
 </p>
 
 @using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Get))
-{
-    <label>Search on a vehicle feature</label>
-    <input type="hidden" value=@ViewBag.Ascending name="ascending" id="sorting">
-    <input type="text" id="searchName" name="searchName" value=@ViewBag.SearchName>
+{   
+    <input type="hidden" value=@Model.SortOrder name="ascending" id="sorting" >
+    <input type="text" value=@Model.Column name="column" id="coulumn" class="input">
+    @Html.DropDownListFor(e => e.SelectedVehicleType, Model.VehicleTypeSelectList,new {@class ="input" })
+    <input type="text" id="searchName" name="searchName" value=@Model.SearchName>
+    <label>Current vehicle column</label>
+    <input type="text" value=@Model.Column name="column" id="coulumn">
     <input type="submit" id="submitId" value="Search" class="btn btn-default" />
-    <label>Current vehicle column</label>    
-    <input type="text" value=@ViewBag.Column name="column" id="coulumn">    
 }
 
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Registration number", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "RegistrationNumber" })
+            @Html.ActionLink("Owner", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Owner" })
         </th>
         <th>
-            @Html.ActionLink("Type", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Type" })
-
+            @Html.ActionLink("Vehicle Type", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Type" })
         </th>
         <th>
-            @Html.ActionLink("Color", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Color" })
-
-        </th>
-        <th>
-            @Html.ActionLink("Brand", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Brand" })
-        </th>
-        <th>
-            @Html.ActionLink("Wheels", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Wheels" })
+            @Html.ActionLink("Registration Number", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "RegistrationNumber" })
         </th>
         <th>
             @Html.ActionLink("Date", "Index", new { ascending = ViewBag.Ascending, searchName = ViewBag.SearchName, column = "Date" })
         </th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.ParkedVehicles)
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Owner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleType.Type)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.RegistrationNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wheels)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ParkingTime)

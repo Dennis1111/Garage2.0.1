@@ -11,6 +11,7 @@ namespace Garage2._0._1.Models
     public class ParkedVehicle
     {
         //public VehicleType Type { get; set; }
+        public string Owner => Member.FirstName + " " + Member.LastName; 
         [Key]
         [Required]
         [StringLength(6, MinimumLength = 6)]
@@ -23,7 +24,7 @@ namespace Garage2._0._1.Models
         [Range(2, 8)]
         public int Wheels { get; set; }
         [Display(Name = "Parking Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm }", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm }", ApplyFormatInEditMode = true)]
         public DateTime ParkingTime { get; set; }
         //Navigational Data
         [ForeignKey("VehicleType")]

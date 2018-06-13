@@ -51,13 +51,16 @@ namespace Garage2._0._1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,FirstName,LastName")] Member member)
         {
+            if (db.Member.Any(m => m.FirstName.ToLower() == member.FirstName.ToLower() && m.LastName.ToLower() == member.LastName.ToLower()))
+            {
+                ModelState.AddModelError("FirstName", "User Already Exist");
+                ModelState.AddModelError("LastName", "User Already Exist");
+            }
             if (ModelState.IsValid)
             {
-                if (db.Member.Any(m => m.FirstName.ToLower() == member.FirstName.ToLower() && m.LastName.ToLower() == member.LastName.ToLower())) 
-                {
-                    return View(member);
-                }
+             
                 db.Member.Add(member);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -85,7 +88,7 @@ namespace Garage2._0._1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName")] Member member)
+        public ActionResult Edit([Bind(Include = "FirstName,LastName")] Member member)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +113,8 @@ namespace Garage2._0._1.Controllers
             }
             return View(member);
         }
+
+
 
 
 

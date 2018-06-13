@@ -189,6 +189,10 @@
     <Compile Include="Migrations\201806121301384_getset.Designer.cs">
       <DependentUpon>201806121301384_getset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806131020412_membereq.cs" />
+    <Compile Include="Migrations\201806131020412_membereq.Designer.cs">
+      <DependentUpon>201806131020412_membereq.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\ParkedVehicle.cs" />
@@ -291,6 +295,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806121301384_getset.resx">
       <DependentUpon>201806121301384_getset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806131020412_membereq.resx">
+      <DependentUpon>201806131020412_membereq.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

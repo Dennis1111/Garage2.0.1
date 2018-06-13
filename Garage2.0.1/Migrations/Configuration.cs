@@ -16,12 +16,13 @@ namespace Garage2._0._1.Migrations
          
             return context.VehicleTypes.ToList();
         }*/
-        int GetMemberId(Garage2._0._1.DataAccessLayer.RegisterContext context,string name) {
+        int GetMemberId(Garage2._0._1.DataAccessLayer.RegisterContext context, string name)
+        {
             var Id = context.Member.Where(m => m.FirstName == name).First().Id;
             return Id;
         }
 
-        int GetVehicleTypeId(Garage2._0._1.DataAccessLayer.RegisterContext context,string name)
+        int GetVehicleTypeId(Garage2._0._1.DataAccessLayer.RegisterContext context, string name)
         {
             var Id = context.VehicleTypes.Where(m => m.Type == name).First().Id;
             return Id;
@@ -41,12 +42,11 @@ namespace Garage2._0._1.Migrations
             context.VehicleTypes.AddOrUpdate(s => new { s.Type }, vehicleTypes);
 
             var registeredPersons = new[] { new Member{ FirstName="Dennis",LastName="Nilsson"},
-                    new Member{ FirstName="Dennis",LastName="Nilsson"},
-                      new Member{ FirstName="Adam",LastName="Olsson"},
+                new Member{ FirstName="Erik",LastName="Larsson"},
+                new Member{ FirstName="Adam",LastName="Olsson"},
                 new Member{ FirstName="Bereket",LastName="Alemeseged"},
-                    new Member{ FirstName="Mohamed",LastName="Almohsen"},
-                    new Member{ FirstName="Nisse",LastName="Hult"}
-
+                new Member{ FirstName="Mohamed",LastName="Almohsen"},
+                new Member{ FirstName="Nisse",LastName="Hult"}
             };
 
             context.Member.AddOrUpdate(s => new { s.FirstName, s.LastName }, registeredPersons);

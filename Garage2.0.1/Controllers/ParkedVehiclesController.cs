@@ -38,13 +38,12 @@ namespace Garage2._0._1.Controllers
         private List<SelectListItem> GetColumnSelectList()
         {
             if (columnSelectList == null)
-            {//var 
+            { 
                 columnSelectList = new List<SelectListItem>();
                 columnSelectList.Add(new SelectListItem() { Text = "Any", Value = "Any" });
                 columnSelectList.Add(new SelectListItem() { Text = "Owner", Value = "Owner" });
                 columnSelectList.Add(new SelectListItem() { Text = "Vehicle Type", Value = "VehicleType" });
                 columnSelectList.Add(new SelectListItem() { Text = "Registration Number", Value = "RegNr" });
-                //columnSelectList.Add(new SelectListItem() { Text = "Color", Value = "4" });
             }
             return columnSelectList;
         }
@@ -155,10 +154,11 @@ namespace Garage2._0._1.Controllers
         {
             ParkVehicleViewModel model = new ParkVehicleViewModel()
             {
-                VehicleTypeSelectList = db.VehicleTypes    //GetVehicleTypeSelectList(),
+                VehicleTypeSelectList = db.VehicleTypes,    //GetVehicleTypeSelectList(),
+                MemberFound = false,
                 Post = false
-
             };
+            //ViewBag.
             return View(model);
         }
 
@@ -167,27 +167,16 @@ namespace Garage2._0._1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime, ")] ParkedVehicle parkedVehicle,
-        //    [Bind(Include = "FirstName,LastName")] Member member, string SelectedVehicleType)
-        public ActionResult Create([Bind(Include = "RegistrationNumber,Type,Color,Brand,Wheels,ParkingTime")] ParkVehicleVievModel parkedVehicle,
-            [Bind(Include = "FirstName,LastName")] Member member, string SelectedVehicleType)
-        {
-            ParkVehicleViewModel model = new ParkVehicleViewModel
-            {
-                ParkedVehicle = parkedVehicle,
-                Member = member,
-                Post = true,
-                VehicleTypeSelectList = db.//GetVehicleTypeSelectList()
-
-            };
-
-            if (db.ParkedVehicle.Any(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber))
+        public ActionResult Create([Bind(Include = "FirstName,LastName,RegistrationNumber,Color,Brand,Wheels,ParkingTime,SelectedVehicleTypeId")] ParkVehicleViewModel model)
+        {            
+            if (db.ParkedVehicle.Any(v => v.RegistrationNumber == model.RegistrationNumber))
             {
                 ModelState.AddModelError("RegistrationNumber", "registration number exist");
                 model.RegNrTaken = true;
                 //return View(model);
             }
-            var foundMember = GetMember(member.FirstName, member.LastName);
+
+            var foundMember = GetMember(model.FirstName, model.LastName);
             if (foundMember == null)
             {
                 model.MemberFound = false;
@@ -197,10 +186,17 @@ namespace Garage2._0._1.Controllers
 
             if (ModelState.IsValid)
             {
-                parkedVehicle.ParkingTime = DateTime.Now;
-                parkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber.ToUpper();
-                parkedVehicle.MembersId = foundMember.Id;
-                parkedVehicle.VehicleTypeId = db.VehicleTypes.Where(v => v.Type == SelectedVehicleType).FirstOrDefault().Id;
+                ParkedVehicle parkedVehicle = new ParkedVehicle
+                {                    
+                    RegistrationNumber = model.RegistrationNumber.ToUpper(),
+                    Color = model.Color,
+                    Brand = model.Brand,
+                    Wheels = model.Wheels,
+                    ParkingTime = DateTime.Now,
+                    MembersId = foundMember.Id,
+                    VehicleTypeId = model.SelectedVehicleTypeId//db.VehicleTypes.Where(v => v.Type == SelectedVehicleType).FirstOrDefault().Id;
+                    
+                };
                 db.ParkedVehicle.Add(parkedVehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");

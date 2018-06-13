@@ -11,7 +11,8 @@ namespace Garage2._0._1.Models
     public class ParkedVehicle
     {
         //public VehicleType Type { get; set; }
-        public string Owner => Member.FirstName + " " + Member.LastName; 
+        //We dont have a member when we create an instance in controller
+        public string Owner => Member ==null ? "" : Member.FirstName + " " + Member.LastName; 
         [Key]
         [Required]
         [StringLength(6, MinimumLength = 6)]
@@ -26,6 +27,7 @@ namespace Garage2._0._1.Models
         [Display(Name = "Parking Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm }", ApplyFormatInEditMode = true)]
         public DateTime ParkingTime { get; set; }
+
         //Navigational Data
         [ForeignKey("VehicleType")]
         public int VehicleTypeId { get; set; }

@@ -2,6 +2,7 @@
 @model ParkedVehiclesViewModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.MemberExists = true;
 }
 
 <h2>Parking Instructions</h2>
@@ -17,11 +18,10 @@
 </p>
 
 @using (Html.BeginForm("Index", "ParkedVehicles", FormMethod.Get))
-{   
-    <input type="hidden" value=@Model.SortOrder name="ascending" id="sorting" >
-    <input type="text" value=@Model.Column name="column" id="coulumn" class="input">
-    @Html.DropDownListFor(e => e.SelectedVehicleType, Model.VehicleTypeSelectList,new {@class ="input" })
+{
+    <input type="hidden" value=@Model.SortOrder name="ascending" id="sorting">
     <input type="text" id="searchName" name="searchName" value=@Model.SearchName>
+    @Html.DropDownListFor(e => e.SelectedColumn, Model.ColumnSelectList, new { @class = "input" })
     <label>Current vehicle column</label>
     <input type="text" value=@Model.Column name="column" id="coulumn">
     <input type="submit" id="submitId" value="Search" class="btn btn-default" />

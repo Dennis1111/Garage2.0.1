@@ -209,6 +209,7 @@
     <Compile Include="Models\ParkVehicleViewModel.cs" />
     <Compile Include="Models\ReceiptViewModel.cs" />
     <Compile Include="Models\SearchFormModel.cs" />
+    <Compile Include="Models\StatisticsModelView.cs" />
     <Compile Include="Models\VehicleType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -272,6 +273,7 @@
     <Content Include="Views\ParkedVehicles2\Edit.cshtml" />
     <Content Include="Views\ParkedVehicles2\Index.cshtml" />
     <Content Include="Views\Members\Search.cshtml" />
+    <Content Include="Views\ParkedVehicles\Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

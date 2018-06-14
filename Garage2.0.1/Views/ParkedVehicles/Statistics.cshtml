@@ -1,0 +1,14 @@
+﻿@using Garage2._0._1.Models
+@model StatisticsModelView
+@{
+    ViewBag.Title = "Statistics";
+}
+
+<h2>Statistics</h2>
+@foreach (var tuple in Model.Statistics)
+{
+    <p>Vehicle type</p>
+    <p>tuple.Item1</p>
+    <p>Count</p>
+    <p>tuple.Item2</p>
+}

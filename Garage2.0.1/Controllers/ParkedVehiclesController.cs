@@ -107,7 +107,6 @@ namespace Garage2._0._1.Controllers
                     var userFound = (member.Count() == 0);
                     parkedVehicles = db.ParkedVehicle.Where(v => v.MembersId == member.FirstOrDefault().Id);
                     parkedVehicles = model.SelectedSorting.Equals("Descending") ? parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
-
                     break;
                 case "RegNr":
                     parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(model.SearchName)) : db.ParkedVehicle;
@@ -140,6 +139,19 @@ namespace Garage2._0._1.Controllers
             model.ColumnSelectList = GetColumnSelectList();
             model.ParkedVehicles = parkedVehicles;       
             return View(model);
+        }
+
+        public ActionResult Statistics() {
+            //var result = IEnumerable<Tuple<string, int>> GroupByVehicleType()
+           
+            var query = db.ParkedVehicle.GroupBy(c => c.GetType())
+                                  .Select(c => new Tuple<string, int>(c.Key.Name, c.Count()));
+                /*foreach (var item in query)
+                {
+                    yield return item;
+                }*/
+            //}
+            return View(new StatisticsModelView() { Statistics=query});
         }
 
         private Boolean Ascending(string sorting)

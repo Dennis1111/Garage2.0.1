@@ -263,6 +263,7 @@
     <Content Include="Views\ParkedVehicles2\Details.cshtml" />
     <Content Include="Views\ParkedVehicles2\Edit.cshtml" />
     <Content Include="Views\ParkedVehicles2\Index.cshtml" />
+    <Content Include="Views\Members\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Garage2._0._1.Models.Member>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Search";
 }
 
-<h2>Index</h2>
+<h2>Search</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,6 +12,7 @@
 <div>
     @using (Html.BeginForm("Search", "Members", FormMethod.Get))
     {
+        @Html.TextBox("FirstName")
         <input type="submit" id="submitId" value="Search Members" class="btn btn-default" />
     }
 </div>

@@ -58,7 +58,7 @@ namespace Garage2._0._1.Controllers
             }
             if (ModelState.IsValid)
             {
-             
+
                 db.Member.Add(member);
 
                 db.SaveChanges();
@@ -113,8 +113,33 @@ namespace Garage2._0._1.Controllers
             }
             return View(member);
         }
+        public ActionResult Search(string FirstName)
+        {
+            var member = db.Member.ToList();
 
+            if (string.IsNullOrWhiteSpace(FirstName))
+            {
+                ModelState.AddModelError("Name", "Couldn't search for null");
+                return View(member);
+            }
 
+            FirstName = FirstName.ToLower();
+            var keywords = FirstName.Split(' ');
+
+            if (keywords.Length == 1) member = member.Where(m => m.FirstName.ToLower() == FirstName || m.LastName.ToLower() == FirstName).ToList();
+            if (keywords.Length == 2) member = member.Where(m => m.FirstName.ToLower() == keywords[0] && m.LastName.ToLower() == keywords[1]
+                                                            || m.LastName.ToLower() == keywords[0] && m.FirstName.ToLower() == keywords[1]).ToList();
+            if (keywords.Length > 2)
+            {
+                foreach (var item in keywords)
+                {
+                    var newmembers = new List<Member>();
+                    newmembers.Concat(member.Where(m => m.FirstName.ToLower() == item || m.LastName.ToLower() == item).ToList());
+                }
+            }
+
+            return View(member);
+        }
 
 
 

@@ -2,13 +2,13 @@
 
 @{
     ViewBag.Title = "checkout";
+    ViewBag.Receipt = false;
 }
 
-<h2>Delete</h2>
 
-<h3>Are you sure you want to checkout the vehicle?</h3>
+
+<h2>Are you sure you want to checkout the vehicle?</h2>
 <div>
-    <h4>ParkedVehicle</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -23,7 +23,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.VehicleType)
+            @Html.DisplayFor(model => model.VehicleType.Type)
         </dd>
 
         <dt>
@@ -58,8 +58,16 @@
             @Html.DisplayFor(model => model.ParkingTime)
         </dd>
     </dl>
+ 
+    @if (ViewBag.Receipt)
+    {
+        <h2>Vehicle is checked out, Do you want a receipt ?</h2>
+        @Html.ActionLink("Yes", "Receipt")
+        @Html.ActionLink("No", "Index")
+    }
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

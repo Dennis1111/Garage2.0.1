@@ -12,6 +12,7 @@ namespace Garage2._0._1.Models
     {
         //public VehicleType Type { get; set; }
         //We dont have a member when we create an instance in controller
+        [Display(Name = "Customer")]
         public string Owner => Member ==null ? "" : Member.FirstName + " " + Member.LastName; 
         [Key]
         [Required]
@@ -22,7 +23,7 @@ namespace Garage2._0._1.Models
         public String Color { get; set; }
         [StringLength(20, MinimumLength = 3)]
         public String Brand { get; set; }
-        [Range(2, 8)]
+        [Range(0, 8)]
         public int Wheels { get; set; }
         [Display(Name = "Parking Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm }", ApplyFormatInEditMode = true)]
@@ -31,7 +32,7 @@ namespace Garage2._0._1.Models
         //Navigational Data
         [ForeignKey("VehicleType")]
         public int VehicleTypeId { get; set; }
-
+        [Display(Name = "Vehicle Type")]
         public virtual VehicleType VehicleType { get; set; }
         //Naviagational property
         [ForeignKey("Member")]

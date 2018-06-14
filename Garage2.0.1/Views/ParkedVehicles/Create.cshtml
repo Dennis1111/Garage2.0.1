@@ -3,25 +3,24 @@
 
 @{
     ViewBag.Title = "Park a Vehicle";
-    ViewBag.RegNrTaken = false;
 }
 
-<h2>ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Enter the Vehicle data</h4>
+        <h4>Enter Name and Vehicle data</h4>
         <hr />
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         
         @if (!Model.MemberFound && Model.Post)
         {
-            <h2>The user @Model.FirstName @Model.LastName is not Registerered in the Database</h2>
-            <h2>Register as a member before parking in the garage</h2>
+            <h2>The user @Model.FirstName @Model.LastName is not registerered in the database</h2>
+            <h2>@Html.ActionLink("Register as a member before parking in the garage", "Create","Members")</h2>
         }
 
         <div class="form-group">

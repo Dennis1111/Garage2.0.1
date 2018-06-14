@@ -5,47 +5,54 @@ namespace Garage2._0._1.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Garage2._0._1.DataAccessLayer.RegisterContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DataAccessLayer.RegisterContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        /*private List<VehicleType> GetVehleTypes(Garage2._0._1.DataAccessLayer.RegisterContext context) {
-         
-            return context.VehicleTypes.ToList();
-        }*/
-        int GetMemberId(Garage2._0._1.DataAccessLayer.RegisterContext context,string name) {
+        int GetMemberId(DataAccessLayer.RegisterContext context, string name)
+        {
             var Id = context.Member.Where(m => m.FirstName == name).First().Id;
             return Id;
         }
 
-        int GetVehicleTypeId(Garage2._0._1.DataAccessLayer.RegisterContext context,string name)
+        int GetVehicleTypeId(DataAccessLayer.RegisterContext context, string name)
         {
             var Id = context.VehicleTypes.Where(m => m.Type == name).First().Id;
             return Id;
         }
+        private Random gen = new Random();
 
-        protected override void Seed(Garage2._0._1.DataAccessLayer.RegisterContext context)
+        DateTime GetParkingTime()
+        {
+            DateTime time = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan(gen.Next(24), gen.Next(59), 0);
+            return time.Subtract(timeSpan);
+        }
+
+        protected override void Seed(DataAccessLayer.RegisterContext context)
         {
             //  This method will be called after migrating to the latest version.
 
             var vehicleTypes = new[] {
                 new VehicleType { Type = "Car"},
                 new VehicleType { Type = "MotorCycle"},
-                new VehicleType { Type = "Boat"},
-                new VehicleType { Type = "Bus"},
-                new VehicleType { Type = "AirPlane"}
+                new VehicleType { Type = "Bus"}
+                //new VehicleType { Type = "Boat"},
+                //new VehicleType { Type = "AirPlane"}
             };
             context.VehicleTypes.AddOrUpdate(s => new { s.Type }, vehicleTypes);
 
             var registeredPersons = new[] { new Member{ FirstName="Dennis",LastName="Nilsson"},
-                    new Member{ FirstName="Dennis",LastName="Nilsson"},
-                      new Member{ FirstName="Adam",LastName="Olsson"},
+                new Member{ FirstName="Erik",LastName="Larsson"},
+                new Member{ FirstName="Adam",LastName="Olsson"},
                 new Member{ FirstName="Bereket",LastName="Alemeseged"},
-                    new Member{ FirstName="Mohamed",LastName="Almohsen"},
-                    new Member{ FirstName="Nisse",LastName="Hult"}
+                new Member{ FirstName="Mohamed",LastName="Almohsen"},
+                new Member{ FirstName="Robert",LastName="Hansson"},
+                new Member{ FirstName="Berit",LastName="Persson"},
+                new Member{ FirstName="Sten",LastName="Hansen"}
 
             };
 
@@ -63,49 +70,57 @@ namespace Garage2._0._1.Migrations
                     Wheels = 4,
                     VehicleTypeId = vehicleTypes[0].Id,
                     MembersId = registeredPersons[0].Id,
-                    ParkingTime = DateTime.Now
+                    ParkingTime = GetParkingTime()
                 },
+                 new ParkedVehicle()
+                 {
+                     RegistrationNumber = "AAA000",
+                     Brand = "BMW",
+                     Color = "White",
+                     Wheels = 4,
+                     VehicleTypeId = vehicleTypes[0].Id,
+                     MembersId = registeredPersons[1].Id,
+                     ParkingTime = GetParkingTime()
+                 },
                 new ParkedVehicle()
                 {
                     RegistrationNumber = "XXX345",
-                    Brand = "Saab",
+                    Brand = "Kawazaki",
                     Color = "Blue",
-                    Wheels = 4,
+                    Wheels = 2,
                     VehicleTypeId = vehicleTypes[1].Id,
                     MembersId = registeredPersons[2].Id,
-                    ParkingTime = DateTime.Now
+                    ParkingTime = GetParkingTime()
                 },
                    new ParkedVehicle()
                    {
-                       RegistrationNumber = "CCC345",
+                       RegistrationNumber = "CCC246",
                        Brand = "Saab",
                        Color = "Red",
                        Wheels = 4,
-                       VehicleTypeId = vehicleTypes[2].Id,
+                       VehicleTypeId = vehicleTypes[0].Id,
                        MembersId = registeredPersons[3].Id,
-                       ParkingTime = DateTime.Now
+                       ParkingTime = GetParkingTime()
                    },
                       new ParkedVehicle()
                       {
                           RegistrationNumber = "ZXC345",
-                          Brand = "Saab",
+                          Brand = "Volvo",
                           Color = "Blue",
                           Wheels = 4,
-                          VehicleTypeId = vehicleTypes[1].Id,
+                          VehicleTypeId = vehicleTypes[0].Id,
                           MembersId = registeredPersons[4].Id,
-                          ParkingTime = DateTime.Now
+                          ParkingTime = GetParkingTime()
                       },
                 new ParkedVehicle()
                 {
                     RegistrationNumber = "DDD123",
-                    Brand = "Kawazaki",
-                    Color = "Red",
+                    Brand = "Tesla",
+                    Color = "White",
                     Wheels = 4,
-                    VehicleTypeId = vehicleTypes[4].Id,
-                    MembersId = registeredPersons[4].Id,
-
-                    //Type = VehicleType.MotorCycle,
-                    ParkingTime = DateTime.Now
+                    VehicleTypeId = vehicleTypes[0].Id,
+                    MembersId = registeredPersons[5].Id,
+                    ParkingTime = GetParkingTime()
                 },
 
                 new ParkedVehicle()
@@ -114,23 +129,19 @@ namespace Garage2._0._1.Migrations
                     Brand = "Scania",
                     Color = "Yellow",
                     Wheels = 4,
-                    VehicleTypeId = vehicleTypes[3].Id,
-                    MembersId = registeredPersons[4].Id,
-
-                    //Type = VehicleType.Bus,
-                    ParkingTime = DateTime.Now
+                    VehicleTypeId = vehicleTypes[2].Id,
+                    MembersId = registeredPersons[6].Id,
+                    ParkingTime = GetParkingTime()
                 },
                 new ParkedVehicle()
                 {
                     RegistrationNumber = "ZZZ111",
-                    Brand = "Boeing",
+                    Brand = "Volvo",
                     Color = "Purple",
-                    Wheels = 2,
-                    VehicleTypeId = vehicleTypes[4].Id,
-                    MembersId = registeredPersons[3].Id,
-
-                    //Type = VehicleType.Airplane,
-                    ParkingTime = DateTime.Now
+                    Wheels = 4,
+                    VehicleTypeId = vehicleTypes[0].Id,
+                    MembersId = registeredPersons[7].Id,
+                    ParkingTime = GetParkingTime()
                 }
                 );
         }

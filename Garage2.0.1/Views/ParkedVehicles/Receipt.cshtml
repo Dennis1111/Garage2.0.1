@@ -6,6 +6,14 @@
 <hr />
 <dl class="dl-horizontal">
     <dt>
+        @Html.DisplayNameFor(model => model.Owner)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Owner)
+    </dd>
+
+    <dt>
         @Html.DisplayNameFor(model => model.RegistrationNumber)
     </dt>
 
@@ -30,19 +38,27 @@
     </dd>
 
     <dt>
-        @Html.DisplayNameFor(model => model.Minutes)
+        @Html.DisplayNameFor(model => model.TotalTime)
     </dt>
 
     <dd>
-        @Html.DisplayFor(model => model.Minutes)
+        @Html.DisplayFor(model => model.TotalTime)
     </dd>
 
     <dt>
-        @Html.DisplayNameFor(model => model.Price)
+        @Html.DisplayNameFor(model => model.PricePerHour)
     </dt>
 
     <dd>
-        @Html.DisplayFor(model => model.Price) Kr
+        @Html.DisplayFor(model => model.PricePerHour)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.TotalPrice)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.TotalPrice)
     </dd>
 </dl>
 <p>

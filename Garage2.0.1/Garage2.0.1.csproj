@@ -194,6 +194,14 @@
     <Compile Include="Migrations\201806131020412_membereq.Designer.cs">
       <DependentUpon>201806131020412_membereq.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806132356401_wheels0.cs" />
+    <Compile Include="Migrations\201806132356401_wheels0.Designer.cs">
+      <DependentUpon>201806132356401_wheels0.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806140338548_noboat.cs" />
+    <Compile Include="Migrations\201806140338548_noboat.Designer.cs">
+      <DependentUpon>201806140338548_noboat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\ParkedVehicle.cs" />
@@ -305,6 +313,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806131020412_membereq.resx">
       <DependentUpon>201806131020412_membereq.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806132356401_wheels0.resx">
+      <DependentUpon>201806132356401_wheels0.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806140338548_noboat.resx">
+      <DependentUpon>201806140338548_noboat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

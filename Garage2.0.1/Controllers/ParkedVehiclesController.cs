@@ -20,8 +20,6 @@ namespace Garage2._0._1.Controllers
             List<SelectListItem> vehicleTypeSelectList = new List<SelectListItem>();
             {//var
                 vehicleTypeSelectList = new List<SelectListItem>();
-                //vehicleTypeSelectList.Add(new SelectListItem() { Text = "Any", Value = "0" });
-                // int count = 1;
 
                 foreach (var type in db.VehicleTypes)
                 {
@@ -38,7 +36,7 @@ namespace Garage2._0._1.Controllers
             List<SelectListItem> columnSelectList = new List<SelectListItem>();
             columnSelectList = new List<SelectListItem>();
             //columnSelectList.Add(new SelectListItem() { Text = "Any", Value = "Any" });
-            columnSelectList.Add(new SelectListItem() { Text = "Owner", Value = "Owner" });
+            columnSelectList.Add(new SelectListItem() { Text = "Customer", Value = "Customer" });
             columnSelectList.Add(new SelectListItem() { Text = "Vehicle Type", Value = "VehicleType" });
             columnSelectList.Add(new SelectListItem() { Text = "Registration Number", Value = "RegNr" });
             return columnSelectList;
@@ -76,9 +74,6 @@ namespace Garage2._0._1.Controllers
 
             ParkedVehiclesViewModel model = new ParkedVehiclesViewModel
             {
-                //SearchName = searchName,
-                //SortOrder = ascending,
-                //SelectedColumn = SelectedColumn,
                 ColumnSelectList = GetColumnSelectList(),
                 ParkedVehicles = parkedVehicles
             };
@@ -94,25 +89,45 @@ namespace Garage2._0._1.Controllers
             IQueryable<ParkedVehicle> parkedVehicles;
             switch (model.SelectedColumn)
             {
-                case "Owner":
-                    var splitted = model.SearchName.Split(' ');
-                    string FirstName, LastName;
-                    if (splitted.Length != 2)
+                case "Customer":                  
+                    //When there is no search name entere we just return a list
+                    if (String.IsNullOrWhiteSpace(model.SearchName))
                     {
-                        FirstName = "";
-                        LastName = "";
-                        parkedVehicles = db.ParkedVehicle;
-                        break;
+                        if (model.SelectedSorting == "Ascending")
+                            parkedVehicles = from member in db.Member
+                                             join vehicle in db.ParkedVehicle on member.Id equals vehicle.MembersId
+                                             orderby member.FirstName ascending
+                                             select vehicle;
+                        else
+                            parkedVehicles = from member in db.Member
+                                             join vehicle in db.ParkedVehicle on member.Id equals vehicle.MembersId
+                                             orderby member.FirstName descending
+                                             select vehicle;
                     }
                     else
                     {
-                        FirstName = splitted[0];
-                        LastName = splitted[1];
+                        var splitted = model.SearchName.Split(' ');
+                        string FirstName, LastName;
+                        if (splitted.Length != 2)
+                        {
+                            //A bit ugly solution should somehow just return an empty Iqueryable list
+                            FirstName = "";
+                            LastName = "";
+                        }
+                        else
+                        {
+                            FirstName = splitted[0];
+                            LastName = splitted[1];
+                        }
+
+                        parkedVehicles = from member in db.Member
+                                         join vehicle in db.ParkedVehicle on member.Id equals vehicle.MembersId
+                                         orderby member.FirstName
+                                         where (member.FirstName.ToLower() == FirstName.ToLower() && (member.LastName.ToLower() == LastName.ToLower()))
+                                         select vehicle;
+                        //var member = db.Member.Where(m => m.FirstName.ToLower() == FirstName.ToLower() && m.LastName.ToLower() == LastName.ToLower());
+                        //parkedVehicles = db.ParkedVehicle.Where(v => v.MembersId == member.FirstOrDefault().Id);
                     }
-                    var member = db.Member.Where(m => m.FirstName.ToLower() == FirstName.ToLower() && m.LastName.ToLower() == LastName.ToLower());
-                    var userFound = (member.Count() == 0);
-                    parkedVehicles = db.ParkedVehicle.Where(v => v.MembersId == member.FirstOrDefault().Id);
-                    parkedVehicles = model.SelectedSorting.Equals("Descending") ? parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
                     break;
                 case "RegNr":
                     parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(model.SearchName)) : db.ParkedVehicle;
@@ -123,24 +138,91 @@ namespace Garage2._0._1.Controllers
                     parkedVehicles = model.SelectedSorting.Equals("Descending") ?
                         parkedVehicles.OrderByDescending(v => v.VehicleType.Type) : parkedVehicles.OrderBy(v => v.VehicleType.Type);
                     break;
-                    /*case "Color":
-                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Color.Equals(searchName)) : db.ParkedVehicle;
-                        parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                            parkedVehicles.OrderByDescending(v => v.Color) : parkedVehicles.OrderBy(v => v.Color);
-                        break;
-                    case "Brand":
-                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Brand.Equals(searchName)) : db.ParkedVehicle;
-                        parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
-                        break;*/
-                    /*case "Wheels":
-                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.Wheels.ToString().Equals(searchName)) : db.ParkedVehicle;
-                        parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.Wheels);
-                        break;*/
-                    /*default:
-                        parkedVehicles = (!String.IsNullOrEmpty(searchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.ToString().Contains(searchName)) : db.ParkedVehicle;
-                        parkedVehicles = !Ascending(ViewBag.Ascending) ?
-                            parkedVehicles.OrderByDescending(v => v.ParkingTime) : parkedVehicles.OrderBy(v => v.ParkingTime);
-                        break;*/
+            }
+
+            model.ColumnSelectList = GetColumnSelectList();
+            model.ParkedVehicles = parkedVehicles;
+            return View(model);
+        }
+
+        // GET: ParkedVehicles
+        [HttpGet]
+        //public ActionResult Index(string SelectedColumn, string ascending, string searchName, string selectedVehicleType)
+        public ActionResult All()
+        {
+            IQueryable<ParkedVehicle> parkedVehicles = db.ParkedVehicle;
+
+            ParkedVehiclesViewModel model = new ParkedVehiclesViewModel
+            {
+                ColumnSelectList = GetColumnSelectList(),
+                ParkedVehicles = parkedVehicles
+            };
+            return View(model);
+        }
+
+        // GET: ParkedVehicles
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public ActionResult Index(string SelectedColumn, string ascending, string searchName, string selectedVehicleType)
+        public ActionResult All([Bind(Include = "SearchName,SelectedSorting,SelectedColumn")] ParkedVehiclesViewModel model)
+        {
+            IQueryable<ParkedVehicle> parkedVehicles;
+            switch (model.SelectedColumn)
+            {
+                case "Customer":
+                    //Havent implemented sorting with name yet, a little more complex with joins needed
+                    //This code can probably be simplified
+                    //When there is no search name entere wwe just return a list
+                    if (String.IsNullOrWhiteSpace(model.SearchName))
+                    {
+                        parkedVehicles = db.ParkedVehicle;
+                    }
+                    else
+                    {
+                        var splitted = model.SearchName.Split(' ');
+                        string FirstName, LastName;
+                        if (splitted.Length != 2)
+                        {
+                            //A bit ugly solution should somehow just return an empty Iqueryable list
+                            FirstName = "";
+                            LastName = "";
+                        }
+                        else
+                        {
+                            FirstName = splitted[0];
+                            LastName = splitted[1];
+                        }
+                        var member = db.Member.Where(m => m.FirstName.ToLower() == FirstName.ToLower() && m.LastName.ToLower() == LastName.ToLower());
+                        parkedVehicles = db.ParkedVehicle.Where(v => v.MembersId == member.FirstOrDefault().Id);
+                    }
+                    break;
+                case "RegNr":
+                    parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.RegistrationNumber.Equals(model.SearchName)) : db.ParkedVehicle;
+                    parkedVehicles = model.SelectedSorting.Equals("Descending") ? parkedVehicles.OrderByDescending(v => v.RegistrationNumber) : parkedVehicles.OrderBy(v => v.RegistrationNumber);
+                    break;
+                case "VehicleType":
+                    parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.VehicleType.Type.Equals(model.SearchName)) : db.ParkedVehicle;
+                    parkedVehicles = model.SelectedSorting.Equals("Descending") ?
+                        parkedVehicles.OrderByDescending(v => v.VehicleType.Type) : parkedVehicles.OrderBy(v => v.VehicleType.Type);
+                    break;
+                case "Color":
+                    parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.Color.Equals(model.SearchName)) : db.ParkedVehicle;
+                    parkedVehicles = !Ascending(ViewBag.Ascending) ?
+                        parkedVehicles.OrderByDescending(v => v.Color) : parkedVehicles.OrderBy(v => v.Color);
+                    break;
+                case "Brand":
+                    parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.Brand.Equals(model.SearchName)) : db.ParkedVehicle;
+                    parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Brand) : parkedVehicles.OrderBy(v => v.Brand);
+                    break;
+                case "Wheels":
+                    parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.Wheels.ToString().Equals(model.SearchName)) : db.ParkedVehicle;
+                    parkedVehicles = !Ascending(ViewBag.Ascending) ? parkedVehicles.OrderByDescending(v => v.Wheels) : parkedVehicles.OrderBy(v => v.Wheels);
+                    break;
+                default:
+                    parkedVehicles = (!String.IsNullOrEmpty(model.SearchName)) ? db.ParkedVehicle.Where(v => v.ParkingTime.ToString().Contains(model.SearchName)) : db.ParkedVehicle;
+                    parkedVehicles = !Ascending(ViewBag.Ascending) ?
+                        parkedVehicles.OrderByDescending(v => v.ParkingTime) : parkedVehicles.OrderBy(v => v.ParkingTime);
+                    break;
             }
             model.ColumnSelectList = GetColumnSelectList();
             model.ParkedVehicles = parkedVehicles;

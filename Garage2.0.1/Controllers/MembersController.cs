@@ -88,7 +88,7 @@ namespace Garage2._0._1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "FirstName,LastName")] Member member)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName")] Member member)
         {
             if (ModelState.IsValid)
             {

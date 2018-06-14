@@ -7,36 +7,6 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-    @*
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $(".header").click(function (evt) {
-                var sortfield = $(evt.target).data("sortfield");
-                if ($("#SortField").val() == sortfield)
-                {
-                    if($("#SortDirection").val()=="ascending")
-                    {
-                        $("#SortDirection").val("descending");
-                    }
-                    else
-                    {
-                        $("#SortDirection").val("ascending");
-                    }
-                }
-                else
-                {
-                    $("#SortField").val(sortfield);
-                    $("#SortDirection").val("ascending");
-                }
-                evt.preventDefault();
-                $("form").submit();
-            });
-
-          
-        });
-    </script>*@
-
 
 </head>
 <body>
@@ -48,11 +18,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Garage 2.0", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Garage 2.5", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Statstics", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Statistics", "Index", "Home")</li>
                     <li>@Html.ActionLink("About Us", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Parked Vehicles", "Index", "ParkedVehicles")</li>

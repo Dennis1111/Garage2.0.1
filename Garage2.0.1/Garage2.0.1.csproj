@@ -205,6 +205,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\ParkedVehicle.cs" />
+    <Compile Include="Models\ParkedVehicleAllViewModel.cs" />
     <Compile Include="Models\ParkedVehiclesViewModel.cs" />
     <Compile Include="Models\ParkVehicleViewModel.cs" />
     <Compile Include="Models\ReceiptViewModel.cs" />
@@ -274,6 +275,7 @@
     <Content Include="Views\ParkedVehicles2\Index.cshtml" />
     <Content Include="Views\Members\Search.cshtml" />
     <Content Include="Views\ParkedVehicles\Statistics.cshtml" />
+    <Content Include="Views\ParkedVehicles\All.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

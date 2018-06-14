@@ -49,7 +49,7 @@ namespace Garage2._0._1.Controllers
             List<SelectListItem> sortSelectList = new List<SelectListItem>();
             sortSelectList = new List<SelectListItem>();
             sortSelectList.Add(new SelectListItem() { Text = "Ascending", Value = "Ascending" });
-            sortSelectList.Add(new SelectListItem() { Text = "Descending", Value = "Descending" });            
+            sortSelectList.Add(new SelectListItem() { Text = "Descending", Value = "Descending" });
             return sortSelectList;
         }
 
@@ -72,8 +72,8 @@ namespace Garage2._0._1.Controllers
         //public ActionResult Index(string SelectedColumn, string ascending, string searchName, string selectedVehicleType)
         public ActionResult Index()
         {
-            IQueryable<ParkedVehicle> parkedVehicles=db.ParkedVehicle;
-            
+            IQueryable<ParkedVehicle> parkedVehicles = db.ParkedVehicle;
+
             ParkedVehiclesViewModel model = new ParkedVehiclesViewModel
             {
                 //SearchName = searchName,
@@ -96,13 +96,19 @@ namespace Garage2._0._1.Controllers
             {
                 case "Owner":
                     var splitted = model.SearchName.Split(' ');
+                    string FirstName, LastName;
                     if (splitted.Length != 2)
                     {
+                        FirstName = "";
+                        LastName = "";
                         parkedVehicles = db.ParkedVehicle;
                         break;
                     }
-                    var FirstName = splitted[0];
-                    var LastName = splitted[1];
+                    else
+                    {
+                        FirstName = splitted[0];
+                        LastName = splitted[1];
+                    }
                     var member = db.Member.Where(m => m.FirstName.ToLower() == FirstName.ToLower() && m.LastName.ToLower() == LastName.ToLower());
                     var userFound = (member.Count() == 0);
                     parkedVehicles = db.ParkedVehicle.Where(v => v.MembersId == member.FirstOrDefault().Id);
@@ -137,21 +143,16 @@ namespace Garage2._0._1.Controllers
                         break;*/
             }
             model.ColumnSelectList = GetColumnSelectList();
-            model.ParkedVehicles = parkedVehicles;       
+            model.ParkedVehicles = parkedVehicles;
             return View(model);
         }
 
-        public ActionResult Statistics() {
+        public ActionResult Statistics()
+        {
             //var result = IEnumerable<Tuple<string, int>> GroupByVehicleType()
-           
-            var query = db.ParkedVehicle.GroupBy(c => c.GetType())
-                                  .Select(c => new Tuple<string, int>(c.Key.Name, c.Count()));
-                /*foreach (var item in query)
-                {
-                    yield return item;
-                }*/
-            //}
-            return View(new StatisticsModelView() { Statistics=query});
+            var list = db.ParkedVehicle.ToList();
+            var query = list.GroupBy(c => c.GetType().Name).Select(c => new Tuple<string, int>(c.Key, c.Count()));
+            return View(new StatisticsModelView() { Statistics = query });
         }
 
         private Boolean Ascending(string sorting)
